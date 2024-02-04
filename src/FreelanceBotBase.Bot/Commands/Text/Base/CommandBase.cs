@@ -1,8 +1,8 @@
-﻿using FreelanceBotBase.Bot.Commands.Interface;
+﻿using FreelanceBotBase.Bot.Commands.Text.Interface;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FreelanceBotBase.Bot.Commands.Base
+namespace FreelanceBotBase.Bot.Commands.Text.Base
 {
     public abstract class CommandBase : ICommand
     {

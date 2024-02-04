@@ -1,9 +1,9 @@
-﻿using FreelanceBotBase.Bot.Commands.Base;
+﻿using FreelanceBotBase.Bot.Commands.Text.Base;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace FreelanceBotBase.Bot.Commands.Usage
+namespace FreelanceBotBase.Bot.Commands.Text.Usage
 {
     public class UsageCommand : CommandBase
     {

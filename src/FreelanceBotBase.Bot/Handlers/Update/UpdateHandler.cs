@@ -1,5 +1,5 @@
-﻿using FreelanceBotBase.Bot.Commands.Factory;
-using FreelanceBotBase.Bot.Commands.Interface;
+﻿using FreelanceBotBase.Bot.Commands.Text.Factory;
+using FreelanceBotBase.Bot.Commands.Text.Interface;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;

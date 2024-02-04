@@ -10,7 +10,7 @@ namespace FeatureBeingTested
 {
     public class ParseGoogleSheet
     {
-        private IConfigurationRoot _config;
+        private readonly IConfigurationRoot _config;
 
         public ParseGoogleSheet()
         {
