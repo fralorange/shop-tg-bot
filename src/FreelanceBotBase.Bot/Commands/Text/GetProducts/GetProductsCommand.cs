@@ -1,4 +1,4 @@
-﻿using FreelanceBotBase.Bot.Commands.Text.Base;
+﻿using FreelanceBotBase.Bot.Commands.Base;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Domain.Product;
 using FreelanceBotBase.Infrastructure.Helpers;
@@ -23,31 +23,22 @@ namespace FreelanceBotBase.Bot.Commands.Text.GetProducts
         public async override Task<Message> ExecuteAsync(Message message, CancellationToken cancellationToken)
         {
             var records = await _googleSheetsHelper.GetRecordsAsync();
-            _cache.Set("Records", records, new MemoryCacheEntryOptions
+
+            var cacheOptions = new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60),
                 SlidingExpiration = TimeSpan.FromMinutes(15),
-                Size = 10,
-            });
+            };
 
-            var paginatedRecords = PaginationHelper<ProductRecord>.SplitByPages(records, 10, 1);
+            _cache.Set($"{message.Chat.Id}_records", records, cacheOptions.SetSize(10));
 
-            string separator = new('-', 90);
-            string output = string.Join("\n" + separator + "\n", paginatedRecords.Select(r => $"Продукт: {r.Product}\nЦена: {r.Cost}"));
+            int currentPage = 1;
 
-            var inlineKeyboard = new InlineKeyboardMarkup(new[]
-            {
-                new[]
-                {
-                    InlineKeyboardButton.WithCallbackData("Предыдущая страница", "prev_page"),
-                    InlineKeyboardButton.WithCallbackData("Следующая страница", "next_page"),
-                },
-                new []
-                {
-                    InlineKeyboardButton.WithCallbackData("Выбрать", "select"),
-                    InlineKeyboardButton.WithCallbackData("Поиск", "search"),
-                }
-            });
+            _cache.Set($"{message.Chat.Id}_currentPage", currentPage, cacheOptions);
+
+            var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
+            var output = PaginationHelper.FormatProductRecords(paginatedRecords);
+            var inlineKeyboard = PaginationHelper.CreateInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,

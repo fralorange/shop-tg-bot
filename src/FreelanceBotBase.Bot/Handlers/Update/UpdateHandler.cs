@@ -1,5 +1,5 @@
-﻿using FreelanceBotBase.Bot.Commands.Text.Factory;
-using FreelanceBotBase.Bot.Commands.Text.Interface;
+﻿using FreelanceBotBase.Bot.Commands.Factory;
+using FreelanceBotBase.Bot.Commands.Interface;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -58,10 +58,10 @@ namespace FreelanceBotBase.Bot.Handlers.Update
                 text: $"Received {callbackQuery.Data}",
                 cancellationToken: cancellationToken);
 
-            await _botClient.SendTextMessageAsync(
-                chatId: callbackQuery.Message!.Chat.Id,
-                text: $"Received {callbackQuery.Data}",
-                cancellationToken: cancellationToken);
+            ICallbackCommand callbackCommand = _commandFactory.CreateCallbackCommand(callbackQuery.Data!);
+
+            Message message = await callbackCommand.HandleCallbackQuery(callbackQuery, cancellationToken);
+            _logger.LogInformation("The message was interacted with id: {MessageId}", message.MessageId);
         }
 
         private async Task BotOnInlineQueryReceived(InlineQuery inlineQuery, CancellationToken cancellationToken)

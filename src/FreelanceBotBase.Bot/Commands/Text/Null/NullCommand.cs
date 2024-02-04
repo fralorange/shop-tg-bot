@@ -1,4 +1,4 @@
-﻿using FreelanceBotBase.Bot.Commands.Text.Interface;
+﻿using FreelanceBotBase.Bot.Commands.Interface;
 using Telegram.Bot.Types;
 
 namespace FreelanceBotBase.Bot.Commands.Text.Null

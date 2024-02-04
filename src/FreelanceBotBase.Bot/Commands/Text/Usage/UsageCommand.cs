@@ -1,4 +1,4 @@
-﻿using FreelanceBotBase.Bot.Commands.Text.Base;
+﻿using FreelanceBotBase.Bot.Commands.Base;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;

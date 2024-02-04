@@ -1,11 +1,13 @@
-﻿using FreelanceBotBase.Bot.Commands.Text.GetProducts;
-using FreelanceBotBase.Bot.Commands.Text.Interface;
+﻿using FreelanceBotBase.Bot.Commands.Callback.Null;
+using FreelanceBotBase.Bot.Commands.Callback.Pages;
+using FreelanceBotBase.Bot.Commands.Interface;
+using FreelanceBotBase.Bot.Commands.Text.GetProducts;
 using FreelanceBotBase.Bot.Commands.Text.Null;
 using FreelanceBotBase.Infrastructure.Helpers;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
 
-namespace FreelanceBotBase.Bot.Commands.Text.Factory
+namespace FreelanceBotBase.Bot.Commands.Factory
 {
     public class CommandFactory
     {
@@ -27,6 +29,16 @@ namespace FreelanceBotBase.Bot.Commands.Text.Factory
                 "/getproducts" => new GetProductsCommand(_botClient, _googleSheetsHelper, _cache),
                 _ => new NullCommand()
                 //_ => new UsageCommand(_botClient)
+            };
+        }
+
+        public ICallbackCommand CreateCallbackCommand(string commandParam)
+        {
+            return commandParam switch
+            {
+                "prev_page" => new PagesCallbackCommand(_botClient, _cache),
+                "next_page" => new PagesCallbackCommand(_botClient, _cache),
+                _ => new NullCallbackCommand()
             };
         }
     }

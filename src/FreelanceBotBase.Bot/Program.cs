@@ -1,4 +1,4 @@
-﻿using FreelanceBotBase.Bot.Commands.Text.Factory;
+﻿using FreelanceBotBase.Bot.Commands.Factory;
 using FreelanceBotBase.Bot.Handlers.Update;
 using FreelanceBotBase.Bot.Services.Polling;
 using FreelanceBotBase.Bot.Services.Receiver;
