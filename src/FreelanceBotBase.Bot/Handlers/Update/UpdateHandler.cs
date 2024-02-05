@@ -1,5 +1,7 @@
-﻿using FreelanceBotBase.Bot.Commands.Factory;
+﻿using FreelanceBotBase.Bot.Commands.Callback.Search;
+using FreelanceBotBase.Bot.Commands.Factory;
 using FreelanceBotBase.Bot.Commands.Interface;
+using FreelanceBotBase.Domain.States;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -13,12 +15,14 @@ namespace FreelanceBotBase.Bot.Handlers.Update
     {
         private readonly ITelegramBotClient _botClient;
         private readonly ILogger<UpdateHandler> _logger;
+        private readonly BotState _botState;
         private readonly CommandFactory _commandFactory;
 
-        public UpdateHandler(ITelegramBotClient botClient, ILogger<UpdateHandler> logger, CommandFactory commandFactory)
+        public UpdateHandler(ITelegramBotClient botClient, ILogger<UpdateHandler> logger, BotState botState, CommandFactory commandFactory)
         {
             _botClient = botClient;
             _logger = logger;
+            _botState = botState;
             _commandFactory = commandFactory;
         }
 
@@ -43,9 +47,18 @@ namespace FreelanceBotBase.Bot.Handlers.Update
             if (message.Text is not { } messageText)
                 return;
 
-            ICommand command = _commandFactory.CreateCommand(messageText.Split(' ')[0]);
+            Message sentMessage;
+            // maybe even refactor whole states and remove them completely and use awaitinginputstate only
+            if (_botState.CurrentState == BotState.State.Default)
+            {
+                ICommand command = _commandFactory.CreateCommand(messageText.Split(' ')[0]);
+                sentMessage = await command.ExecuteAsync(message, cancellationToken);
+            } else
+            {
+                ICallbackCommandWithInput command = _commandFactory.CreateCallbackCommandWithUserInput(_botState.AwaitingInputState);
+                sentMessage = await command.HandleUserInput(messageText, cancellationToken);
+            }
 
-            Message sentMessage = await command.ExecuteAsync(message, cancellationToken);
             _logger.LogInformation("The message was sent with id: {SentMessageId}", sentMessage.MessageId);
         }
 
@@ -53,15 +66,12 @@ namespace FreelanceBotBase.Bot.Handlers.Update
         {
             _logger.LogInformation("Received inline keyboard callback from {CallbackQueryId}", callbackQuery.Id);
 
-            await _botClient.AnswerCallbackQueryAsync(
-                callbackQueryId: callbackQuery.Id,
-                text: $"Received {callbackQuery.Data}",
-                cancellationToken: cancellationToken);
-
-            ICallbackCommand callbackCommand = _commandFactory.CreateCallbackCommand(callbackQuery.Data!);
-
-            Message message = await callbackCommand.HandleCallbackQuery(callbackQuery, cancellationToken);
-            _logger.LogInformation("The message was interacted with id: {MessageId}", message.MessageId);
+            if (_botState.CurrentState == BotState.State.Default)
+            {
+                ICallbackCommand callbackCommand = _commandFactory.CreateCallbackCommand(callbackQuery.Data!);
+                Message message = await callbackCommand.HandleCallbackQuery(callbackQuery, cancellationToken);
+                _logger.LogInformation("The message was interacted with id: {MessageId}", message.MessageId);
+            }
         }
 
         private async Task BotOnInlineQueryReceived(InlineQuery inlineQuery, CancellationToken cancellationToken)

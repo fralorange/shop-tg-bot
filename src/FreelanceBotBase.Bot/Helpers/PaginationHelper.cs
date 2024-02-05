@@ -28,26 +28,5 @@ namespace FreelanceBotBase.Bot.Helpers
             string separator = new('-', 90);
             return string.Join('\n' + separator + '\n', records.Select(r => $"Продукт: {r.Product}\nЦена: {r.Cost}"));
         }
-
-        /// <summary>
-        /// Create an Inline keyboard.
-        /// </summary>
-        /// <returns>Inline keyboard.</returns>
-        public static InlineKeyboardMarkup CreateInlineKeyboard()
-        {
-            return new InlineKeyboardMarkup(new[]
-            {
-                new[]
-                {
-                    InlineKeyboardButton.WithCallbackData("Предыдущая страница", "prev_page"),
-                    InlineKeyboardButton.WithCallbackData("Следующая страница", "next_page"),
-                },
-                new []
-                {
-                    InlineKeyboardButton.WithCallbackData("Выбрать", "select"),
-                    InlineKeyboardButton.WithCallbackData("Поиск", "search"),
-                }
-            });
-        }
     }
 }

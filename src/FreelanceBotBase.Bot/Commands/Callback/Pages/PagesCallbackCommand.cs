@@ -30,19 +30,30 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Pages
             }
 
             int maxPage = (records.Count() + 9) / 10;
-            currentPage = callbackQuery.Data == "next_page" ? Math.Min(currentPage + 1, maxPage) : Math.Max(currentPage - 1, 1);
+            int newPage = callbackQuery.Data == "next_page" ? Math.Min(currentPage + 1, maxPage) : Math.Max(currentPage - 1, 1);
 
+            if (newPage == currentPage)
+            {
+                await BotClient.AnswerCallbackQueryAsync(
+                    callbackQueryId: callbackQuery.Id,
+                    text: newPage == maxPage ? "Вы уже находитесь на последней странице!" : "Вы уже находитесь на первой странице!",
+                    showAlert: true,
+                    cancellationToken: cancellationToken);
+
+                return callbackQuery.Message;
+            }
+
+            currentPage = newPage;
             _cache.Set($"{callbackQuery.Message.Chat.Id}_currentPage", currentPage);
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
             var output = PaginationHelper.FormatProductRecords(paginatedRecords);
-            var inlineKeyboard = PaginationHelper.CreateInlineKeyboard();
 
             return await BotClient.EditMessageTextAsync(
                 chatId: callbackQuery.Message.Chat.Id,
                 messageId: callbackQuery.Message.MessageId,
                 text: output,
-                replyMarkup: inlineKeyboard,
+                replyMarkup: callbackQuery.Message.ReplyMarkup,
                 cancellationToken: cancellationToken);
         }
     }

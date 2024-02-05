@@ -2,6 +2,7 @@
 using FreelanceBotBase.Bot.Handlers.Update;
 using FreelanceBotBase.Bot.Services.Polling;
 using FreelanceBotBase.Bot.Services.Receiver;
+using FreelanceBotBase.Domain.States;
 using FreelanceBotBase.Infrastructure.Configuration;
 using FreelanceBotBase.Infrastructure.Extensions;
 using FreelanceBotBase.Infrastructure.Helpers;
@@ -34,6 +35,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddMemoryCache();
 
         services.AddTransient<GoogleSheetsHelper>();
+        services.AddSingleton<BotState>();
         services.AddSingleton<CommandFactory>();
         services.AddScoped<UpdateHandler>();
         services.AddScoped<ReceiverService>();

@@ -5,20 +5,20 @@ using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FreelanceBotBase.Bot.Commands.Text.GetProducts
+namespace FreelanceBotBase.Bot.Commands.Callback.Reset
 {
-    public class GetProductsCommand : CommandBase
+    public class ResetCallbackCommand : CallbackCommandBase
     {
         private readonly GoogleSheetsHelper _googleSheetsHelper;
         private readonly IMemoryCache _cache;
 
-        public GetProductsCommand(ITelegramBotClient client, GoogleSheetsHelper googleSheetsHelper, IMemoryCache cache) : base(client)
+        public ResetCallbackCommand(ITelegramBotClient client, GoogleSheetsHelper googleSheetsHelper, IMemoryCache cache) : base(client)
         {
             _googleSheetsHelper = googleSheetsHelper;
             _cache = cache;
         }
 
-        public async override Task<Message> ExecuteAsync(Message message, CancellationToken cancellationToken)
+        public async override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         {
             var records = await _googleSheetsHelper.GetRecordsAsync();
 
@@ -28,18 +28,19 @@ namespace FreelanceBotBase.Bot.Commands.Text.GetProducts
                 SlidingExpiration = TimeSpan.FromMinutes(15),
             };
 
-            _cache.Set($"{message.Chat.Id}_records", records, cacheOptions.SetSize(10));
+            _cache.Set($"{callbackQuery.Message!.Chat.Id}_records", records, cacheOptions.SetSize(10));
 
             int currentPage = 1;
 
-            _cache.Set($"{message.Chat.Id}_currentPage", currentPage, cacheOptions);
+            _cache.Set($"{callbackQuery.Message.Chat.Id}_currentPage", currentPage, cacheOptions);
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
             var output = PaginationHelper.FormatProductRecords(paginatedRecords);
             var inlineKeyboard = InlineKeyboardHelper.CreateDefaultInlineKeyboard();
 
-            return await BotClient.SendTextMessageAsync(
-                chatId: message.Chat.Id,
+            return await BotClient.EditMessageTextAsync(
+                chatId: callbackQuery.Message.Chat.Id,
+                messageId: callbackQuery.Message.MessageId,
                 text: output,
                 replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
