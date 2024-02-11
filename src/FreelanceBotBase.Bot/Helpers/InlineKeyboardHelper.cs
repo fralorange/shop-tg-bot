@@ -48,5 +48,36 @@ namespace FreelanceBotBase.Bot.Helpers
                 }
             });
         }
+
+        /// <summary>
+        /// Creates an Inline keyboard after select procedure.
+        /// </summary>
+        /// <returns>Inline keyboard.</returns>
+        public static InlineKeyboardMarkup CreateSelectInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Подтвердить", "confirm"),
+                    InlineKeyboardButton.WithCallbackData("Отменить", "reset"),
+                }
+            });
+        }
+
+        /// <summary>
+        /// Creates an Inline keyboard after select failure procedure.
+        /// </summary>
+        /// <returns>Inline keyboard.</returns>
+        public static InlineKeyboardMarkup CreateSelectNotFoundInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Вернуться назад", "reset"),
+                }
+            });
+        }
     }
 }

@@ -2,6 +2,7 @@
 using FreelanceBotBase.Bot.Commands.Callback.Pages;
 using FreelanceBotBase.Bot.Commands.Callback.Reset;
 using FreelanceBotBase.Bot.Commands.Callback.Search;
+using FreelanceBotBase.Bot.Commands.Callback.Select;
 using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Commands.Text.GetProducts;
 using FreelanceBotBase.Bot.Commands.Text.Null;
@@ -44,6 +45,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 "next_page" => new PagesCallbackCommand(_botClient, _cache),
                 "search" => new SearchCallbackCommand(_botClient, _cache, _botState),
                 "reset" => new ResetCallbackCommand(_botClient, _googleSheetsHelper, _cache),
+                "select" => new SelectCallbackCommand(_botClient, _cache, _botState),
                 _ => new NullCallbackCommand()
             };
         }
@@ -54,6 +56,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             return inputState switch
             {
                 BotState.InputState.Search => new SearchCallbackCommand(_botClient, _cache, _botState),
+                BotState.InputState.Selection => new SelectCallbackCommand(_botClient, _cache, _botState),
                 _ => new NullCallbackCommand()
             };
         }
