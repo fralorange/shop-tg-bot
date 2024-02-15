@@ -4,6 +4,6 @@ namespace FreelanceBotBase.Bot.Commands.Interface
 {
     public interface ICallbackCommandWithInput : ICallbackCommand
     {
-        Task<Message> HandleUserInput(string userInput, CancellationToken cancellationToken);
+        Task<Message> HandleUserInput(string userInput, long chatId, CancellationToken cancellationToken);
     }
 }

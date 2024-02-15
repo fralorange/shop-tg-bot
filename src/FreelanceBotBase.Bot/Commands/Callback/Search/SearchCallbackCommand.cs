@@ -25,7 +25,6 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Search
         {
             _botState.CurrentState = BotState.State.AwaitingInput;
             _botState.AwaitingInputState = BotState.InputState.Search;
-            _botState.ChatId = callbackQuery.Message!.Chat.Id;
 
             return await BotClient.EditMessageTextAsync(
                 chatId: callbackQuery.Message!.Chat.Id,
@@ -35,18 +34,18 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Search
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<Message> HandleUserInput(string userInput, CancellationToken cancellationToken)
+        public async Task<Message> HandleUserInput(string userInput, long chatId, CancellationToken cancellationToken)
         {
             _botState.CurrentState = BotState.State.Default;
             _botState.AwaitingInputState = BotState.InputState.None;
 
             //FIX DRY!!!
-            var records = _cache.Get<IEnumerable<ProductRecord>>($"{_botState.ChatId}_records");
+            var records = _cache.Get<IEnumerable<ProductRecord>>($"{chatId}_records");
 
             if (records is null)
             {
                 return await BotClient.SendTextMessageAsync(
-                    chatId: _botState.ChatId,
+                    chatId: chatId,
                     text: "Время ответа истекло. Пожалуйста, сгенерируйте новый список!",
                     replyMarkup: new ReplyKeyboardRemove(),
                     cancellationToken: cancellationToken);
@@ -60,25 +59,21 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Search
                 SlidingExpiration = TimeSpan.FromMinutes(15),
             };
 
-            _cache.Set($"{_botState.ChatId}_records", filteredRecords, cacheOptions.SetSize(10));
+            _cache.Set($"{chatId}_records", filteredRecords, cacheOptions.SetSize(10));
 
             int currentPage = 1;
 
-            _cache.Set($"{_botState.ChatId}_currentPage", currentPage, cacheOptions);
+            _cache.Set($"{chatId}_currentPage", currentPage, cacheOptions);
 
             var paginatedRecords = PaginationHelper.SplitByPages(filteredRecords, 10, currentPage);
             var output = PaginationHelper.FormatProductRecords(paginatedRecords);
             var inlineKeyboard = InlineKeyboardHelper.CreateSearchInlineKeyboard();
 
-            var msg =  await BotClient.SendTextMessageAsync(
-                chatId: _botState.ChatId,
+            return await BotClient.SendTextMessageAsync(
+                chatId: chatId,
                 text: output,
                 replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
-
-            _botState.ChatId = default;
-
-            return msg;
         }
     }
 }
