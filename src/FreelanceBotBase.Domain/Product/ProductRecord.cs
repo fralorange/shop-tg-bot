@@ -5,7 +5,7 @@
     /// </summary>
     public class ProductRecord
     {
-        public string Product { get; set; }
-        public int Cost { get; set; }
+        public required string Product { get; set; }
+        public required int Cost { get; set; }
     }
 }

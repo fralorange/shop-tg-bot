@@ -1,12 +1,15 @@
-﻿using FreelanceBotBase.Bot.Commands.Callback.Null;
+﻿using FreelanceBotBase.Bot.Commands.Callback.AddProduct;
+using FreelanceBotBase.Bot.Commands.Callback.Null;
 using FreelanceBotBase.Bot.Commands.Callback.Pages;
 using FreelanceBotBase.Bot.Commands.Callback.Reset;
 using FreelanceBotBase.Bot.Commands.Callback.Search;
 using FreelanceBotBase.Bot.Commands.Callback.Select;
 using FreelanceBotBase.Bot.Commands.Interface;
+using FreelanceBotBase.Bot.Commands.Text.GetCart;
 using FreelanceBotBase.Bot.Commands.Text.GetProducts;
 using FreelanceBotBase.Bot.Commands.Text.Null;
 using FreelanceBotBase.Bot.Services.BotState;
+using FreelanceBotBase.Bot.Services.Cart;
 using FreelanceBotBase.Domain.States;
 using FreelanceBotBase.Infrastructure.Helpers;
 using Microsoft.Extensions.Caching.Memory;
@@ -19,13 +22,20 @@ namespace FreelanceBotBase.Bot.Commands.Factory
         private readonly ITelegramBotClient _botClient;
         private readonly IBotStateService _botStateService;
         private readonly IMemoryCache _cache;
+        private readonly ICartService _cartService;
         private readonly GoogleSheetsHelper _googleSheetsHelper;
 
-        public CommandFactory(ITelegramBotClient botClient, IMemoryCache cache, IBotStateService botStateService, GoogleSheetsHelper googleSheetsHelper)
+        public CommandFactory(
+            ITelegramBotClient botClient, 
+            IMemoryCache cache, 
+            IBotStateService botStateService, 
+            ICartService cartService, 
+            GoogleSheetsHelper googleSheetsHelper)
         {
             _botClient = botClient;
             _botStateService = botStateService;
             _cache = cache;
+            _cartService = cartService;
             _googleSheetsHelper = googleSheetsHelper;
         }
 
@@ -34,6 +44,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             return commandName switch
             {
                 "/getproducts" => new GetProductsCommand(_botClient, _googleSheetsHelper, _cache),
+                "/getcart" => new GetCartCommand(_botClient, _cartService),
                 _ => new NullCommand()
             };
         }
@@ -49,6 +60,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 "search" => new SearchCallbackCommand(_botClient, _cache, botState),
                 "reset" => new ResetCallbackCommand(_botClient, _googleSheetsHelper, _cache),
                 "select" => new SelectCallbackCommand(_botClient, _cache, botState),
+                "confirm" => new AddProductCallbackCommand(_botClient, _cartService, _cache),
                 _ => new NullCallbackCommand()
             };
         }

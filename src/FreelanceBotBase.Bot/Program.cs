@@ -1,6 +1,7 @@
 ﻿using FreelanceBotBase.Bot.Commands.Factory;
 using FreelanceBotBase.Bot.Handlers.Update;
 using FreelanceBotBase.Bot.Services.BotState;
+using FreelanceBotBase.Bot.Services.Cart;
 using FreelanceBotBase.Bot.Services.Polling;
 using FreelanceBotBase.Bot.Services.Receiver;
 using FreelanceBotBase.Domain.States;
@@ -38,6 +39,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<GoogleSheetsHelper>();
         services.AddSingleton<CommandFactory>();
         services.AddSingleton<IBotStateService, BotStateService>();
+        services.AddSingleton<ICartService, CartService>();
         services.AddScoped<UpdateHandler>();
         services.AddScoped<ReceiverService>();
         services.AddHostedService<PollingService>();
