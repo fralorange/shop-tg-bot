@@ -66,16 +66,47 @@ namespace FreelanceBotBase.Bot.Helpers
         }
 
         /// <summary>
-        /// Creates an Inline keyboard after select failure procedure.
+        /// Creates an Inline keyboard that resets whole thing.
         /// </summary>
         /// <returns>Inline keyboard.</returns>
-        public static InlineKeyboardMarkup CreateSelectNotFoundInlineKeyboard()
+        public static InlineKeyboardMarkup CreateResetInlineKeyboard()
         {
             return new InlineKeyboardMarkup(new[]
             {
                 new[]
                 {
                     InlineKeyboardButton.WithCallbackData("Вернуться назад", "reset"),
+                }
+            });
+        }
+
+        /// <summary>
+        /// Create and Inline keyboard that allows user return menu.
+        /// </summary>
+        /// <returns></returns>
+        public static InlineKeyboardMarkup CreateBackInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Вернуться назад", "back"),
+                }
+            });
+        }
+
+        public static InlineKeyboardMarkup CreateCartInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Удалить", "delete"),
+                    InlineKeyboardButton.WithCallbackData("Очистить", "clear"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Оформить заказ", "checkout")
                 }
             });
         }

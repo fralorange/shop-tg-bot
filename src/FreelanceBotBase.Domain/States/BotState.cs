@@ -12,6 +12,7 @@
         {
             None,
             Search,
+            Delete,
             Selection,
         }
 

@@ -34,12 +34,13 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Select
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<Message> HandleUserInput(string userInput, long chatId, CancellationToken cancellationToken)
+        public async Task<Message> HandleUserInput(string userInput, Message message, CancellationToken cancellationToken)
         {
             _botState.CurrentState = BotState.State.Default;
             _botState.AwaitingInputState = BotState.InputState.None;
 
-            //FIX DRY!!! 
+            var chatId = message.Chat.Id;
+
             var records = _cache.Get<IEnumerable<ProductRecord>>($"{chatId}_records");
 
             if (records is null)
@@ -55,7 +56,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Select
 
             var keyboard = product != null 
                 ? InlineKeyboardHelper.CreateSelectInlineKeyboard() 
-                : InlineKeyboardHelper.CreateSelectNotFoundInlineKeyboard();
+                : InlineKeyboardHelper.CreateResetInlineKeyboard();
             var output = product != null ?
                 $"Вы выбрали: \"{product.Product}\"\nПодтвердите свой выбор!"
                 : "Не найдено!";

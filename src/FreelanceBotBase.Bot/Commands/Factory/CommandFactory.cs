@@ -1,4 +1,7 @@
 ﻿using FreelanceBotBase.Bot.Commands.Callback.AddProduct;
+using FreelanceBotBase.Bot.Commands.Callback.Back;
+using FreelanceBotBase.Bot.Commands.Callback.Clear;
+using FreelanceBotBase.Bot.Commands.Callback.Delete;
 using FreelanceBotBase.Bot.Commands.Callback.Null;
 using FreelanceBotBase.Bot.Commands.Callback.Pages;
 using FreelanceBotBase.Bot.Commands.Callback.Reset;
@@ -61,6 +64,9 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 "reset" => new ResetCallbackCommand(_botClient, _googleSheetsHelper, _cache),
                 "select" => new SelectCallbackCommand(_botClient, _cache, botState),
                 "confirm" => new AddProductCallbackCommand(_botClient, _cartService, _cache),
+                "delete" => new DeleteCallbackCommand(_botClient, _cartService, botState),
+                "clear" => new ClearCallbackCommand(_botClient, _cartService),
+                "back" => new BackCartCallbackCommand(_botClient, _cartService),
                 _ => new NullCallbackCommand()
             };
         }
@@ -74,6 +80,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             {
                 BotState.InputState.Search => new SearchCallbackCommand(_botClient, _cache, botState),
                 BotState.InputState.Selection => new SelectCallbackCommand(_botClient, _cache, botState),
+                BotState.InputState.Delete => new DeleteCallbackCommand(_botClient, _cartService, botState),
                 _ => new NullCallbackCommand()
             };
         }

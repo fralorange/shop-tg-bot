@@ -23,7 +23,18 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AddProduct
 
         public async override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         {
-            //FIX DRY.
+            var cart = _cartService.Get(callbackQuery.From.Id);
+
+            if (cart is not null && cart!.Count() == 10)
+            {
+                return await BotClient.EditMessageTextAsync(
+                    chatId: callbackQuery.Message!.Chat.Id,
+                    messageId: callbackQuery.Message.MessageId,
+                    text: "Маскимальное количество товаров в корзине: 10",
+                    replyMarkup: InlineKeyboardHelper.CreateResetInlineKeyboard(),
+                    cancellationToken: cancellationToken);
+            }
+
             var records = _cache.Get<IEnumerable<ProductRecord>>($"{callbackQuery.Message!.Chat.Id}_records");
 
             if (records is null)
@@ -51,7 +62,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AddProduct
                 chatId: callbackQuery.Message.Chat.Id,
                 messageId: callbackQuery.Message.MessageId,
                 text: $"{productName} успешно добавлен в вашу корзину!",
-                replyMarkup: InlineKeyboardHelper.CreateSelectNotFoundInlineKeyboard(),
+                replyMarkup: InlineKeyboardHelper.CreateResetInlineKeyboard(),
                 cancellationToken: cancellationToken);
         }
     }

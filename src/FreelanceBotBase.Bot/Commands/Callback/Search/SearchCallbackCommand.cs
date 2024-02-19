@@ -3,6 +3,7 @@ using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Domain.Product;
 using FreelanceBotBase.Domain.States;
+using FreelanceBotBase.Infrastructure.Helpers;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -34,13 +35,15 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Search
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<Message> HandleUserInput(string userInput, long chatId, CancellationToken cancellationToken)
+        public async Task<Message> HandleUserInput(string userInput, Message message, CancellationToken cancellationToken)
         {
             _botState.CurrentState = BotState.State.Default;
             _botState.AwaitingInputState = BotState.InputState.None;
 
-            //FIX DRY!!!
-            var records = _cache.Get<IEnumerable<ProductRecord>>($"{chatId}_records");
+            var chatId = message.Chat.Id;
+
+            var cacheHelper = new CacheHelper(_cache);
+            var records = cacheHelper.GetRecords(chatId, out int currentPage, userInput);
 
             if (records is null)
             {
@@ -51,21 +54,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Search
                     cancellationToken: cancellationToken);
             }
 
-            var filteredRecords = records.Where(r => r.Product.StartsWith(userInput)).ToList();
-
-            var cacheOptions = new MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60),
-                SlidingExpiration = TimeSpan.FromMinutes(15),
-            };
-
-            _cache.Set($"{chatId}_records", filteredRecords, cacheOptions.SetSize(10));
-
-            int currentPage = 1;
-
-            _cache.Set($"{chatId}_currentPage", currentPage, cacheOptions);
-
-            var paginatedRecords = PaginationHelper.SplitByPages(filteredRecords, 10, currentPage);
+            var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
             var output = PaginationHelper.FormatProductRecords(paginatedRecords);
             var inlineKeyboard = InlineKeyboardHelper.CreateSearchInlineKeyboard();
 

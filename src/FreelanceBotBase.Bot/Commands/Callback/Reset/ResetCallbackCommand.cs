@@ -4,6 +4,7 @@ using FreelanceBotBase.Infrastructure.Helpers;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Reset
 {
@@ -20,26 +21,26 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Reset
 
         public async override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         {
-            var records = await _googleSheetsHelper.GetRecordsAsync();
+            var chatId = callbackQuery.Message!.Chat.Id;
+            
+            var cacheHelper = new CacheHelper(_cache);
+            var records = cacheHelper.GetRecords(chatId, out int currentPage);
 
-            var cacheOptions = new MemoryCacheEntryOptions
+            if (records is null)
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60),
-                SlidingExpiration = TimeSpan.FromMinutes(15),
-            };
-
-            _cache.Set($"{callbackQuery.Message!.Chat.Id}_records", records, cacheOptions.SetSize(10));
-
-            int currentPage = 1;
-
-            _cache.Set($"{callbackQuery.Message.Chat.Id}_currentPage", currentPage, cacheOptions);
+                return await BotClient.SendTextMessageAsync(
+                    chatId: chatId,
+                    text: "Время ответа истекло. Пожалуйста, сгенерируйте новый список!",
+                    replyMarkup: new ReplyKeyboardRemove(),
+                    cancellationToken: cancellationToken);
+            }
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
             var output = PaginationHelper.FormatProductRecords(paginatedRecords);
             var inlineKeyboard = InlineKeyboardHelper.CreateDefaultInlineKeyboard();
 
             return await BotClient.EditMessageTextAsync(
-                chatId: callbackQuery.Message.Chat.Id,
+                chatId: chatId,
                 messageId: callbackQuery.Message.MessageId,
                 text: output,
                 replyMarkup: inlineKeyboard,

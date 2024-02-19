@@ -10,7 +10,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Null
             return Task.FromResult(new Message());
         }
 
-        public Task<Message> HandleUserInput(string userInput, long chatId, CancellationToken cancellationToken)
+        public Task<Message> HandleUserInput(string userInput, Message message, CancellationToken cancellationToken)
         {
             return Task.FromResult(new Message());
         }

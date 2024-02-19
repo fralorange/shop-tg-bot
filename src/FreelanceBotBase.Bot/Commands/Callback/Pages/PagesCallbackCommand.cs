@@ -17,13 +17,15 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Pages
 
         public async override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         {
+            var chatId = callbackQuery.Message!.Chat.Id;
+
             var currentPage = _cache.Get<int>($"{callbackQuery.Message!.Chat.Id}_currentPage");
             var records = _cache.Get<IEnumerable<ProductRecord>>($"{callbackQuery.Message.Chat.Id}_records");
 
             if (records is null)
             {
                 return await BotClient.SendTextMessageAsync(
-                    chatId: callbackQuery.Message.Chat.Id,
+                    chatId: chatId,
                     text: "Время ответа истекло. Пожалуйста, сгенерируйте новый список!",
                     replyMarkup: new ReplyKeyboardRemove(),
                     cancellationToken: cancellationToken);
@@ -44,13 +46,13 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Pages
             }
 
             currentPage = newPage;
-            _cache.Set($"{callbackQuery.Message.Chat.Id}_currentPage", currentPage);
+            _cache.Set($"{chatId}_currentPage", currentPage);
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
             var output = PaginationHelper.FormatProductRecords(paginatedRecords);
 
             return await BotClient.EditMessageTextAsync(
-                chatId: callbackQuery.Message.Chat.Id,
+                chatId: chatId,
                 messageId: callbackQuery.Message.MessageId,
                 text: output,
                 replyMarkup: callbackQuery.Message.ReplyMarkup,

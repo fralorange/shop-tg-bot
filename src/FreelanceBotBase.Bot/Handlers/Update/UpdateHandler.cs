@@ -58,7 +58,7 @@ namespace FreelanceBotBase.Bot.Handlers.Update
             else
             {
                 ICallbackCommandWithInput command = _commandFactory.CreateCallbackCommandWithUserInput(botState.AwaitingInputState, message.Chat.Id);
-                sentMessage = await command.HandleUserInput(messageText, message.Chat.Id, cancellationToken);
+                sentMessage = await command.HandleUserInput(messageText, message, cancellationToken);
             }
 
             _logger.LogInformation("The message was sent with id: {SentMessageId}", sentMessage.MessageId);
