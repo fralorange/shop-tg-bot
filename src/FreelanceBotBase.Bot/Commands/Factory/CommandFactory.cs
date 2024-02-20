@@ -1,5 +1,6 @@
 ﻿using FreelanceBotBase.Bot.Commands.Callback.AddProduct;
 using FreelanceBotBase.Bot.Commands.Callback.Back;
+using FreelanceBotBase.Bot.Commands.Callback.Checkout;
 using FreelanceBotBase.Bot.Commands.Callback.Clear;
 using FreelanceBotBase.Bot.Commands.Callback.Delete;
 using FreelanceBotBase.Bot.Commands.Callback.Null;
@@ -67,6 +68,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 "delete" => new DeleteCallbackCommand(_botClient, _cartService, botState),
                 "clear" => new ClearCallbackCommand(_botClient, _cartService),
                 "back" => new BackCartCallbackCommand(_botClient, _cartService),
+                "checkout" => new CheckoutCallbackCommand(_botClient, _cartService, botState),
                 _ => new NullCallbackCommand()
             };
         }
@@ -81,6 +83,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 BotState.InputState.Search => new SearchCallbackCommand(_botClient, _cache, botState),
                 BotState.InputState.Selection => new SelectCallbackCommand(_botClient, _cache, botState),
                 BotState.InputState.Delete => new DeleteCallbackCommand(_botClient, _cartService, botState),
+                BotState.InputState.ChoosingDeliveryPoint => new CheckoutCallbackCommand(_botClient, _cartService, botState),
                 _ => new NullCallbackCommand()
             };
         }

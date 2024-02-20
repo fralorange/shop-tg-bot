@@ -81,9 +81,9 @@ namespace FreelanceBotBase.Bot.Helpers
         }
 
         /// <summary>
-        /// Create and Inline keyboard that allows user return menu.
+        /// Creates an Inline keyboard that allows user return menu.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Inline keyboard.</returns>
         public static InlineKeyboardMarkup CreateBackInlineKeyboard()
         {
             return new InlineKeyboardMarkup(new[]
@@ -95,6 +95,10 @@ namespace FreelanceBotBase.Bot.Helpers
             });
         }
 
+        /// <summary>
+        /// Creates an Inline keyboard for cart operations.
+        /// </summary>
+        /// <returns>Inline keyboard.</returns>
         public static InlineKeyboardMarkup CreateCartInlineKeyboard()
         {
             return new InlineKeyboardMarkup(new[]
@@ -107,6 +111,22 @@ namespace FreelanceBotBase.Bot.Helpers
                 new[]
                 {
                     InlineKeyboardButton.WithCallbackData("Оформить заказ", "checkout")
+                }
+            });
+        }
+
+        /// <summary>
+        /// Creates an Inline keyboard to confirm go to chat with Admin.
+        /// </summary>
+        /// <returns>Inline keyboard.</returns>
+        public static InlineKeyboardMarkup CreateConfirmChattingInlineKeyabord()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Подтвердить", "chat"),
+                    InlineKeyboardButton.WithCallbackData("Отмена", "back")
                 }
             });
         }

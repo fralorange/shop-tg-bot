@@ -1,7 +1,7 @@
 ﻿namespace FreelanceBotBase.Domain.Product
 {
     /// <summary>
-    /// Product record to show data.
+    /// Product record from google sheet.
     /// </summary>
     public class ProductRecord
     {
