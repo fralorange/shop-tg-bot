@@ -6,8 +6,11 @@ using FreelanceBotBase.Bot.Services.Polling;
 using FreelanceBotBase.Bot.Services.Receiver;
 using FreelanceBotBase.Domain.States;
 using FreelanceBotBase.Infrastructure.Configuration;
+using FreelanceBotBase.Infrastructure.DataAccess;
+using FreelanceBotBase.Infrastructure.DataAccess.Interfaces;
 using FreelanceBotBase.Infrastructure.Extensions;
 using FreelanceBotBase.Infrastructure.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,6 +38,15 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHttpClient("google_sheets_client");
 
         services.AddMemoryCache();
+
+        services.AddScoped<IDbInitializer, DbInitializer>();
+        services.AddSingleton<IDbContextOptionsConfigurator<BaseDbContext>, BaseDbContextOptionsConfigurator>();
+        services.AddDbContext<BaseDbContext>((sp, opt) =>
+        {
+            var configurator = sp.GetRequiredService<IDbContextOptionsConfigurator<BaseDbContext>>();
+            configurator.Configure((DbContextOptionsBuilder<BaseDbContext>)opt);
+        });
+        services.AddScoped<DbContext, BaseDbContext>();
 
         services.AddTransient<GoogleSheetsHelper>();
         services.AddSingleton<CommandFactory>();

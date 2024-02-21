@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FreelanceBotBase.Domain\FreelanceBotBase.Domain.csproj" />
+    <ProjectReference Include="..\FreelanceBotBase.Infrastructure.DataAccess\FreelanceBotBase.Infrastructure.DataAccess.csproj" />
     <ProjectReference Include="..\FreelanceBotBase.Infrastructure\FreelanceBotBase.Infrastructure.csproj" />
   </ItemGroup>
 

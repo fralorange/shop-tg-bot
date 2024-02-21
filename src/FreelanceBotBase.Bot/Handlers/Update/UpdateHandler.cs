@@ -48,7 +48,7 @@ namespace FreelanceBotBase.Bot.Handlers.Update
                 return;
 
             var botState = _botStateService.GetOrCreateBotState(message.Chat.Id);
-            
+
             Message sentMessage;
             if (botState.CurrentState == BotState.State.Default)
             {
