@@ -1,15 +1,22 @@
-﻿using FreelanceBotBase.Bot.Commands.Factory;
+﻿using AutoMapper;
+using FreelanceBotBase.Bot.Commands.Factory;
 using FreelanceBotBase.Bot.Handlers.Update;
-using FreelanceBotBase.Bot.Services.BotState;
+using FreelanceBotBase.Bot.Services.State;
 using FreelanceBotBase.Bot.Services.Cart;
 using FreelanceBotBase.Bot.Services.Polling;
 using FreelanceBotBase.Bot.Services.Receiver;
-using FreelanceBotBase.Domain.States;
+using FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.Product;
+using FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.User;
 using FreelanceBotBase.Infrastructure.Configuration;
 using FreelanceBotBase.Infrastructure.DataAccess;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Facades;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Repositories;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Facades;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Repositories;
 using FreelanceBotBase.Infrastructure.DataAccess.Interfaces;
 using FreelanceBotBase.Infrastructure.Extensions;
 using FreelanceBotBase.Infrastructure.Helpers;
+using FreelanceBotBase.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +43,27 @@ IHost host = Host.CreateDefaultBuilder(args)
             });
 
         services.AddHttpClient("google_sheets_client");
+        #region Mappers
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<ProductMapper>();
+            cfg.AddProfile<UserMapper>();
+        });
+
+        config.AssertConfigurationIsValid();
+        IMapper mapper = config.CreateMapper();
+        services.AddSingleton(mapper);
+        #endregion
+
+        #region Repos
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IDeliveryPointRepository, DeliveryPointRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        #region Facades
+        services.AddScoped<IDeliveryPointFacade, DeliveryPointFacade>();
+        services.AddScoped<IUserFacade, UserFacade>();
+        #endregion
+        #endregion
 
         services.AddMemoryCache();
 
@@ -49,7 +77,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<DbContext, BaseDbContext>();
 
         services.AddTransient<GoogleSheetsHelper>();
-        services.AddSingleton<CommandFactory>();
+        services.AddScoped<CommandFactory>();
         services.AddSingleton<IBotStateService, BotStateService>();
         services.AddSingleton<ICartService, CartService>();
         services.AddScoped<UpdateHandler>();

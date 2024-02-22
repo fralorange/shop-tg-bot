@@ -1,7 +1,7 @@
 ﻿using FreelanceBotBase.Bot.Commands.Factory;
 using FreelanceBotBase.Bot.Commands.Interface;
-using FreelanceBotBase.Bot.Services.BotState;
-using FreelanceBotBase.Domain.States;
+using FreelanceBotBase.Bot.Services.State;
+using FreelanceBotBase.Domain.State;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;

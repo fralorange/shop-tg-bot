@@ -1,4 +1,4 @@
-﻿namespace FreelanceBotBase.Domain.States
+﻿namespace FreelanceBotBase.Domain.State
 {
     public class BotState
     {

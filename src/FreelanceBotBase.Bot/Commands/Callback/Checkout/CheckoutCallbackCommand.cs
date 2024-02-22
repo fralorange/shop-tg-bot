@@ -3,7 +3,7 @@ using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Bot.Services.Cart;
 using FreelanceBotBase.Domain.DeliveryPoint;
-using FreelanceBotBase.Domain.States;
+using FreelanceBotBase.Domain.State;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 

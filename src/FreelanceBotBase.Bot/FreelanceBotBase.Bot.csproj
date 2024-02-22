@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
@@ -19,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FreelanceBotBase.Contracts\FreelanceBotBase.Contracts.csproj" />
     <ProjectReference Include="..\FreelanceBotBase.Domain\FreelanceBotBase.Domain.csproj" />
+    <ProjectReference Include="..\FreelanceBotBase.Infrastructure.ComponentRegistrar\FreelanceBotBase.Infrastructure.ComponentRegistrar.csproj" />
     <ProjectReference Include="..\FreelanceBotBase.Infrastructure.DataAccess\FreelanceBotBase.Infrastructure.DataAccess.csproj" />
     <ProjectReference Include="..\FreelanceBotBase.Infrastructure\FreelanceBotBase.Infrastructure.csproj" />
   </ItemGroup>

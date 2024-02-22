@@ -1,6 +1,8 @@
-﻿using FreelanceBotBase.Bot.Commands.Base;
+﻿using AutoMapper;
+using FreelanceBotBase.Bot.Commands.Base;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Bot.Services.Cart;
+using FreelanceBotBase.Contracts.Product;
 using FreelanceBotBase.Domain.Product;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.RegularExpressions;
@@ -35,7 +37,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AddProduct
                     cancellationToken: cancellationToken);
             }
 
-            var records = _cache.Get<IEnumerable<ProductRecord>>($"{callbackQuery.Message!.Chat.Id}_records");
+            var records = _cache.Get<IEnumerable<ProductDto>>($"{callbackQuery.Message!.Chat.Id}_records");
 
             if (records is null)
             {

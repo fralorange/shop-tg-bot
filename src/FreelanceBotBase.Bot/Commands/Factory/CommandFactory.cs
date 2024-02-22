@@ -1,4 +1,5 @@
-﻿using FreelanceBotBase.Bot.Commands.Callback.AddProduct;
+﻿using AutoMapper;
+using FreelanceBotBase.Bot.Commands.Callback.AddProduct;
 using FreelanceBotBase.Bot.Commands.Callback.Back;
 using FreelanceBotBase.Bot.Commands.Callback.Checkout;
 using FreelanceBotBase.Bot.Commands.Callback.Clear;
@@ -12,12 +13,17 @@ using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Commands.Text.GetCart;
 using FreelanceBotBase.Bot.Commands.Text.GetProducts;
 using FreelanceBotBase.Bot.Commands.Text.Null;
-using FreelanceBotBase.Bot.Services.BotState;
+using FreelanceBotBase.Bot.Services.State;
 using FreelanceBotBase.Bot.Services.Cart;
-using FreelanceBotBase.Domain.States;
+using FreelanceBotBase.Domain.State;
 using FreelanceBotBase.Infrastructure.Helpers;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Repositories;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Facades;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Repositories;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Facades;
+using FreelanceBotBase.Bot.Commands.Text.GetUsers;
 
 namespace FreelanceBotBase.Bot.Commands.Factory
 {
@@ -27,28 +33,46 @@ namespace FreelanceBotBase.Bot.Commands.Factory
         private readonly IBotStateService _botStateService;
         private readonly IMemoryCache _cache;
         private readonly ICartService _cartService;
+        private readonly IMapper _mapper;
         private readonly GoogleSheetsHelper _googleSheetsHelper;
+        #region Repos and Facades
+        private readonly IDeliveryPointRepository _deliveryPointRepository;
+        private readonly IDeliveryPointFacade _deliveryPointFacade;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserFacade _userFacade;
+        #endregion
 
         public CommandFactory(
-            ITelegramBotClient botClient, 
-            IMemoryCache cache, 
-            IBotStateService botStateService, 
-            ICartService cartService, 
-            GoogleSheetsHelper googleSheetsHelper)
+            ITelegramBotClient botClient,
+            IMemoryCache cache,
+            IBotStateService botStateService,
+            ICartService cartService,
+            IMapper mapper,
+            GoogleSheetsHelper googleSheetsHelper,
+            IDeliveryPointRepository deliveryPointRepository,
+            IDeliveryPointFacade deliveryPointFacade,
+            IUserRepository userRepository,
+            IUserFacade userFacade)
         {
             _botClient = botClient;
             _botStateService = botStateService;
             _cache = cache;
             _cartService = cartService;
+            _mapper = mapper;
             _googleSheetsHelper = googleSheetsHelper;
+            _deliveryPointRepository = deliveryPointRepository;
+            _deliveryPointFacade = deliveryPointFacade;
+            _userRepository = userRepository;
+            _userFacade = userFacade;
         }
 
         public ICommand CreateCommand(string commandName)
         {
             return commandName switch
             {
-                "/getproducts" => new GetProductsCommand(_botClient, _googleSheetsHelper, _cache),
+                "/getproducts" => new GetProductsCommand(_botClient, _googleSheetsHelper, _cache, _mapper),
                 "/getcart" => new GetCartCommand(_botClient, _cartService),
+                "/getusers" => new GetUsersCommand(_botClient, _userRepository, _mapper),
                 _ => new NullCommand()
             };
         }

@@ -1,4 +1,4 @@
-﻿using FreelanceBotBase.Domain.Product;
+﻿using FreelanceBotBase.Contracts.Product;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace FreelanceBotBase.Infrastructure.Helpers
@@ -10,9 +10,9 @@ namespace FreelanceBotBase.Infrastructure.Helpers
         public CacheHelper(IMemoryCache cache)
             => _cache = cache;
 
-        public IEnumerable<ProductRecord>? GetRecords(long chatId, out int currentPage, string userInput = null)
+        public IEnumerable<ProductDto>? GetRecords(long chatId, out int currentPage, string userInput = null)
         {
-            var records = _cache.Get<IEnumerable<ProductRecord>>($"{chatId}_records");
+            var records = _cache.Get<IEnumerable<ProductDto>>($"{chatId}_records");
             currentPage = 1;
 
             if (records == null)

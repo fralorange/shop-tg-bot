@@ -36,7 +36,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Reset
             }
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
-            var output = PaginationHelper.FormatProductRecords(paginatedRecords);
+            var output = PaginationHelper.Format(paginatedRecords);
             var inlineKeyboard = InlineKeyboardHelper.CreateDefaultInlineKeyboard();
 
             return await BotClient.EditMessageTextAsync(

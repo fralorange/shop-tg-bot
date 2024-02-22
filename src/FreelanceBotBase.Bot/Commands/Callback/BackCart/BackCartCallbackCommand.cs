@@ -22,7 +22,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Back
 
             string output = cart == null
                 ? "Корзина пустая!"
-                : "Корзина:\n" + PaginationHelper.FormatProductRecords(cart);
+                : "Корзина:\n" + PaginationHelper.Format(cart);
 
             var inlineKeyboard = (cart == null) ? null : InlineKeyboardHelper.CreateCartInlineKeyboard();
 

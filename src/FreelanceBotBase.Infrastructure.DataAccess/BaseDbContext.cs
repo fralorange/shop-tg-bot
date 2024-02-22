@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Configuration;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace FreelanceBotBase.Infrastructure.DataAccess
 {
@@ -13,6 +15,9 @@ namespace FreelanceBotBase.Infrastructure.DataAccess
         /// <inheritdoc"/>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new DeliveryPointConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
     }

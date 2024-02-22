@@ -2,7 +2,7 @@
 using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Domain.Product;
-using FreelanceBotBase.Domain.States;
+using FreelanceBotBase.Domain.State;
 using FreelanceBotBase.Infrastructure.Helpers;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
@@ -55,7 +55,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Search
             }
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
-            var output = PaginationHelper.FormatProductRecords(paginatedRecords);
+            var output = PaginationHelper.Format(paginatedRecords);
             var inlineKeyboard = InlineKeyboardHelper.CreateSearchInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(

@@ -1,8 +1,9 @@
 ﻿using FreelanceBotBase.Bot.Commands.Base;
 using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Helpers;
+using FreelanceBotBase.Contracts.Product;
 using FreelanceBotBase.Domain.Product;
-using FreelanceBotBase.Domain.States;
+using FreelanceBotBase.Domain.State;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -41,7 +42,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Select
 
             var chatId = message.Chat.Id;
 
-            var records = _cache.Get<IEnumerable<ProductRecord>>($"{chatId}_records");
+            var records = _cache.Get<IEnumerable<ProductDto>>($"{chatId}_records");
 
             if (records is null)
             {

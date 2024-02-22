@@ -1,7 +1,6 @@
 ﻿using FreelanceBotBase.Infrastructure.DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace FreelanceBotBase.Infrastructure.DataAccess
 {
@@ -19,7 +18,8 @@ namespace FreelanceBotBase.Infrastructure.DataAccess
             var connectionString = _configuration.GetConnectionString(ConnectionStringName);
 
             options
-                .UseNpgsql(connectionString);
+                .UseNpgsql(connectionString)
+                .UseLazyLoadingProxies();
         }
     }
 }

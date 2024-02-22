@@ -1,33 +1,50 @@
-﻿using FreelanceBotBase.Domain.Product;
+﻿using AutoMapper;
+using FreelanceBotBase.Contracts.Product;
+using FreelanceBotBase.Domain.Product;
 using System.Collections.Concurrent;
 
 namespace FreelanceBotBase.Bot.Services.Cart
 {
+    /// <inheritdoc cref="ICartService"/>
     public class CartService : ICartService
     {
-        private ConcurrentDictionary<long, List<ProductRecord>> _carts;
+        private readonly ConcurrentDictionary<long, List<ProductRecord>> _carts;
+        private readonly IMapper _mapper;
 
-        public CartService()
-            => _carts = new ConcurrentDictionary<long, List<ProductRecord>>();
+        /// <inheritdoc cref="ICartService"/>
+        public CartService(IMapper mapper)
+        {
+            _carts = new ConcurrentDictionary<long, List<ProductRecord>>();
+            _mapper = mapper;
+        }
 
-        public IEnumerable<ProductRecord>? Get(long userId)
+        public IEnumerable<ProductDto>? Get(long userId)
         {
             if (_carts.TryGetValue(userId, out var cart))
-                return cart;
+            {
+                return _mapper.Map<List<ProductDto>>(cart);
+            }
             return null;
         }
 
-        public ProductRecord? Get(long userId, string productName)
+        public ProductDto? Get(long userId, string productName)
         {
             if (_carts.TryGetValue(userId, out var cart))
-                return cart.FirstOrDefault(p => p.Product.Equals(productName));
+            {
+                var product = cart.FirstOrDefault(p => p.Product.Equals(productName));
+                if (product != null)
+                {
+                    return _mapper.Map<ProductDto>(product);
+                }
+            }
             return null;
         }
 
-        public void Add(long userId, ProductRecord productRecord)
+        public void Add(long userId, ProductDto productRecord)
         {
             var cart = _carts.GetOrAdd(userId, new List<ProductRecord>());
-            cart.Add(productRecord);
+            var product = _mapper.Map<ProductRecord>(productRecord);
+            cart.Add(product);
         }
 
         public bool Delete(long userId)

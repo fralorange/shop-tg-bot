@@ -1,4 +1,5 @@
-﻿using FreelanceBotBase.Domain.Product;
+﻿using FreelanceBotBase.Contracts.Product;
+using FreelanceBotBase.Contracts.User;
 
 namespace FreelanceBotBase.Bot.Helpers
 {
@@ -22,10 +23,16 @@ namespace FreelanceBotBase.Bot.Helpers
         /// </summary>
         /// <param name="records">Records that are being formatted.</param>
         /// <returns>Formatted data.</returns>
-        public static string FormatProductRecords(IEnumerable<ProductRecord> records)
+        public static string Format(IEnumerable<ProductDto> records)
         {
             string separator = new('-', 90);
             return string.Join('\n' + separator + '\n', records.Select(r => $"Продукт: {r.Product}\nЦена: {r.Cost}"));
+        }
+
+        public static string Format(IEnumerable<UserDto> users)
+        {
+            string separator = new('-', 90);
+            return string.Join('\n' + separator + '\n', users.Select(u => $"Id: {u.UserId}\nРоль: {(Domain.User.User.Role)u.UserRole}"));
         }
     }
 }

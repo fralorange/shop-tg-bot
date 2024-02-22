@@ -1,6 +1,6 @@
 ﻿using FreelanceBotBase.Bot.Commands.Base;
 using FreelanceBotBase.Bot.Helpers;
-using FreelanceBotBase.Domain.Product;
+using FreelanceBotBase.Contracts.Product;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -20,7 +20,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Pages
             var chatId = callbackQuery.Message!.Chat.Id;
 
             var currentPage = _cache.Get<int>($"{callbackQuery.Message!.Chat.Id}_currentPage");
-            var records = _cache.Get<IEnumerable<ProductRecord>>($"{callbackQuery.Message.Chat.Id}_records");
+            var records = _cache.Get<IEnumerable<ProductDto>>($"{callbackQuery.Message.Chat.Id}_records");
 
             if (records is null)
             {
@@ -49,7 +49,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Pages
             _cache.Set($"{chatId}_currentPage", currentPage);
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
-            var output = PaginationHelper.FormatProductRecords(paginatedRecords);
+            var output = PaginationHelper.Format(paginatedRecords);
 
             return await BotClient.EditMessageTextAsync(
                 chatId: chatId,

@@ -130,5 +130,22 @@ namespace FreelanceBotBase.Bot.Helpers
                 }
             });
         }
+
+        public static InlineKeyboardMarkup CreateGetUsersInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Предыдущая страница", "prev_user_page"),
+                    InlineKeyboardButton.WithCallbackData("Следующая страница", "next_user_page"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Добавить", "add"),
+                    InlineKeyboardButton.WithCallbackData("Удалить", "remove")
+                }
+            });
+        }
     }
 }
