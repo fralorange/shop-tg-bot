@@ -2,6 +2,6 @@
 {
     public interface IUserFacade
     {
-        Task AssignDeliveryPointAsync(long userId, long deliveryPointId, CancellationToken cancellationToken);
+        Task AssignDeliveryPointAsync(long userId, long? deliveryPointId, CancellationToken cancellationToken);
     }
 }

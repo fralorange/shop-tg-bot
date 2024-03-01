@@ -142,8 +142,44 @@ namespace FreelanceBotBase.Bot.Helpers
                 },
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData("Добавить", "add"),
-                    InlineKeyboardButton.WithCallbackData("Удалить", "remove")
+                    InlineKeyboardButton.WithCallbackData("Добавить", "add_manager"),
+                    InlineKeyboardButton.WithCallbackData("Удалить", "remove_manager")
+                }
+            });
+        }
+
+        public static InlineKeyboardMarkup CreateAddNewDpInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Изменить название", "add_dp_name"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Изменить местоположение", "add_dp_location")
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Создать", "create_dp")
+                }
+            });
+        }
+
+        public static InlineKeyboardMarkup CreateGetDeliveryPointsInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Предыдущая страница", "prev_dp_page"),
+                    InlineKeyboardButton.WithCallbackData("Следующая страница", "next_dp_page"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Выбрать", "select_dp"),
+                    InlineKeyboardButton.WithCallbackData("Очистить связь", "clear_dp"),
                 }
             });
         }

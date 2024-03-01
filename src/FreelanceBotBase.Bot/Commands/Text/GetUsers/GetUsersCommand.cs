@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FreelanceBotBase.Bot.Commands.Base;
+using FreelanceBotBase.Bot.Commands.Forbidden;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Contracts.User;
 using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Repositories;
@@ -23,12 +24,8 @@ namespace FreelanceBotBase.Bot.Commands.Text.GetUsers
         public override async Task<Message> ExecuteAsync(Message message, CancellationToken cancellationToken)
         {
             var currentUser = await _userRepository.GetByIdAsync(message.From!.Id);
-            if (currentUser.UserRole != Domain.User.User.Role.Owner)
-                return await BotClient.SendTextMessageAsync(
-                chatId: message.Chat.Id,
-                text: "Нет доступа к данной команде!",
-                replyMarkup: new ReplyKeyboardRemove(),
-                cancellationToken: cancellationToken);
+            if (currentUser == null || currentUser.UserRole != Domain.User.User.Role.Owner)
+                return await ForbiddenOutputFromCommand.ForbidAsync(BotClient, message, cancellationToken);
 
             var users = await _userRepository.GetAll();
             var usersDto = _mapper.Map<List<UserDto>>(users);

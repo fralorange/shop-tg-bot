@@ -23,6 +23,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
+using FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.DeliveryPoint;
 // to-do: create clean architecture.
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -48,6 +49,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         {
             cfg.AddProfile<ProductMapper>();
             cfg.AddProfile<UserMapper>();
+            cfg.AddProfile<DeliveryPointMapper>();
         });
 
         config.AssertConfigurationIsValid();

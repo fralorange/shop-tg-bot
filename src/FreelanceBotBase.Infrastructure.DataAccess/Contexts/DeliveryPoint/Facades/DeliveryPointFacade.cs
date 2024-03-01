@@ -10,7 +10,7 @@ namespace FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Faca
         public DeliveryPointFacade(IRepository<DeliveryPointEntity> repository)
             => _repository = repository;
 
-        public async Task SetManagerAsync(long deliveryPointId, long userId, CancellationToken cancellationToken)
+        public async Task SetManagerAsync(long deliveryPointId, long? userId, CancellationToken cancellationToken)
         {
             var deliveryPoint = await _repository.GetByIdAsync(deliveryPointId);
             ArgumentNullException.ThrowIfNull(deliveryPoint, nameof(deliveryPoint));

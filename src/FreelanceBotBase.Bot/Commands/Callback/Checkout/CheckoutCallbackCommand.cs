@@ -1,9 +1,10 @@
-﻿using FreelanceBotBase.Bot.Commands.Base;
+﻿using AutoMapper;
+using FreelanceBotBase.Bot.Commands.Base;
 using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Helpers;
-using FreelanceBotBase.Bot.Services.Cart;
-using FreelanceBotBase.Domain.DeliveryPoint;
+using FreelanceBotBase.Contracts.DeliveryPoint;
 using FreelanceBotBase.Domain.State;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Repositories;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -11,35 +12,32 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Checkout
 {
     public class CheckoutCallbackCommand : CallbackCommandBase, ICallbackCommandWithInput
     {
-        private readonly ICartService _cartService;
+        private readonly IDeliveryPointRepository _deliveryPointRepository;
+        private readonly IMapper _mapper;
         private readonly BotState _botState;
-        private readonly IEnumerable<DeliveryPoint> _deliveryPoints;
 
-        public CheckoutCallbackCommand(ITelegramBotClient botClient, ICartService cartService, BotState botState) : base(botClient)
+        public CheckoutCallbackCommand(
+            ITelegramBotClient botClient,
+            IDeliveryPointRepository deliveryPointRepository,
+            IMapper mapper,
+            BotState botState) : base(botClient)
         {
-            _cartService = cartService;
+            _deliveryPointRepository = deliveryPointRepository;
+            _mapper = mapper;
             _botState = botState;
-
-            _deliveryPoints = new List<DeliveryPoint>
-            {
-                new() { Id = 1, Name = "Пункт 1", Location = "Ул. Ульянова 1" },
-                new() { Id = 2, Name = "Пункт 2", Location = "Ул. Пожарова 2" },
-                new() { Id = 3, Name = "Пункт 3", Location = "Ул. Петрова 3" },
-                new() { Id = 4, Name = "Пункт 4", Location = "Ул. Демидова 4" },
-                new() { Id = 5, Name = "Пункт 5", Location = "Ул. Нахимова 5" },
-            };
         }
 
-        public override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
-        { 
-            var separator = new string('-', 90);
-            var output = string
-                .Join('\n' + separator + '\n', _deliveryPoints.Select(dp => $"Номер: {dp.Id}\nНазвание пункта: {dp.Name}\nЛокация: {dp.Location}"));
+        public async override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
+        {
+            var deliveryPoints = await _deliveryPointRepository.GetAll();
+            var deliveryPointsDto = _mapper.Map<List<DeliveryPointDto>>(deliveryPoints);
+
+            var output = PaginationHelper.Format(deliveryPointsDto);
 
             _botState.CurrentState = BotState.State.AwaitingInput;
             _botState.AwaitingInputState = BotState.InputState.ChoosingDeliveryPoint;
 
-            return BotClient.EditMessageTextAsync(
+            return await BotClient.EditMessageTextAsync(
                 chatId: callbackQuery.Message!.Chat.Id,
                 messageId: callbackQuery.Message.MessageId,
                 text: "Введите в текстовое поле номер пункта выдачи из предложенных ниже\n" + output,
@@ -61,7 +59,8 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Checkout
                     replyMarkup: InlineKeyboardHelper.CreateBackInlineKeyboard(),
                     cancellationToken: cancellationToken);
 
-            var deliveryPoint = _deliveryPoints.First(dp => dp.Id.Equals(dpId));
+            var deliveryPoints = await _deliveryPointRepository.GetAll();
+            var deliveryPoint = deliveryPoints.First(dp => dp.Id.Equals(dpId));
 
             var output = $"Вы выбрали пункт выдачи \"{deliveryPoint.Name}\" находящийся по адресу: \"{deliveryPoint.Location}\"\n";
             var inlineKeyboard = InlineKeyboardHelper.CreateConfirmChattingInlineKeyabord();

@@ -8,7 +8,7 @@
         /// <summary>
         /// Delivery point id.
         /// </summary>
-        public required long Id { get; set; }
+        public long Id { get; set; }
         /// <summary>
         /// Delivery point name.
         /// </summary>

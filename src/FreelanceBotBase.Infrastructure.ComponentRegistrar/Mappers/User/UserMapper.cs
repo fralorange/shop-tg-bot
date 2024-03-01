@@ -10,7 +10,8 @@ namespace FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.User
         {
             CreateMap<UserEntity, UserDto>(MemberList.None)
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-                .ForMember(dest => dest.UserRole, opt => opt.MapFrom(src => src.UserRole));
+                .ForMember(dest => dest.UserRole, opt => opt.MapFrom(src => src.UserRole))
+                .ForMember(dest => dest.DeliveryPointId, opt => opt.MapFrom(src => src.DeliveryPointId));
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using FreelanceBotBase.Bot.Commands.Base;
-using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Repositories;
+using FreelanceBotBase.Bot.Commands.Forbidden;
+using FreelanceBotBase.Bot.Helpers;
+using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Repositories;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -7,15 +9,22 @@ namespace FreelanceBotBase.Bot.Commands.Text.AddDeliveryPoint
 {
     public class AddDeliveryPointCommand : CommandBase
     {
-        private readonly IDeliveryPointRepository _deliveryPointRepository;
+        private readonly IUserRepository _userRepository;
 
-        public AddDeliveryPointCommand(ITelegramBotClient botClient, IDeliveryPointRepository deliveryPointRepository) : base(botClient)
-            => _deliveryPointRepository = deliveryPointRepository;
-        
+        public AddDeliveryPointCommand(ITelegramBotClient botClient, IUserRepository userRepository) : base(botClient)
+            => _userRepository = userRepository;
 
-        public override Task<Message> ExecuteAsync(Message message, CancellationToken cancellationToken)
+        public override async Task<Message> ExecuteAsync(Message message, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var currentUser = await _userRepository.GetByIdAsync(message.From!.Id);
+            if (currentUser.UserRole != Domain.User.User.Role.Owner)
+                return await ForbiddenOutputFromCommand.ForbidAsync(BotClient, message, cancellationToken);
+
+            return await BotClient.SendTextMessageAsync(
+                chatId: message.Chat.Id,
+                text: "Название: ...\nЛокация: ...\n",
+                replyMarkup: InlineKeyboardHelper.CreateAddNewDpInlineKeyboard(),
+                cancellationToken: cancellationToken);
         }
     }
 }

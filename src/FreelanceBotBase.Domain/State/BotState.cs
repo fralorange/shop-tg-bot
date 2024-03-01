@@ -6,6 +6,7 @@
         {
             Default,
             AwaitingInput,
+            Chatting,
         }
 
         public enum InputState
@@ -15,6 +16,11 @@
             Delete,
             Selection,
             ChoosingDeliveryPoint,
+            EditingDpName,
+            EditingDpLocation,
+            AddingUser,
+            RemovingUser,
+            AsigningDpManager
         }
 
         public State CurrentState { get; set; } = State.Default;

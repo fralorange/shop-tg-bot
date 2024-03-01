@@ -2,6 +2,6 @@
 {
     public interface IDeliveryPointFacade
     {
-        Task SetManagerAsync(long deliveryPointId, long userId, CancellationToken cancellationToken);
+        Task SetManagerAsync(long deliveryPointId, long? userId, CancellationToken cancellationToken);
     }
 }

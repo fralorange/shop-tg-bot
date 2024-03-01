@@ -1,5 +1,7 @@
-﻿using FreelanceBotBase.Contracts.Product;
+﻿using FreelanceBotBase.Contracts.DeliveryPoint;
+using FreelanceBotBase.Contracts.Product;
 using FreelanceBotBase.Contracts.User;
+using FreelanceBotBase.Domain.DeliveryPoint;
 
 namespace FreelanceBotBase.Bot.Helpers
 {
@@ -33,6 +35,13 @@ namespace FreelanceBotBase.Bot.Helpers
         {
             string separator = new('-', 90);
             return string.Join('\n' + separator + '\n', users.Select(u => $"Id: {u.UserId}\nРоль: {(Domain.User.User.Role)u.UserRole}"));
+        }
+
+        public static string Format(IEnumerable<DeliveryPointDto> points)
+        {
+            var separator = new string('-', 90);
+            return string
+                .Join('\n' + separator + '\n', points.Select(dp => $"Номер: {dp.Id}\nНазвание пункта: {dp.Name}\nЛокация: {dp.Location}\nПустой: {dp.ManagerId == null}"));
         }
     }
 }

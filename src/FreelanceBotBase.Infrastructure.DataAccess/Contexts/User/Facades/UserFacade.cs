@@ -11,7 +11,7 @@ namespace FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Facades
         public UserFacade(IRepository<UserEntity> repository)
             => _repository = repository;
 
-        public async Task AssignDeliveryPointAsync(long userId, long deliveryPointId, CancellationToken cancellationToken)
+        public async Task AssignDeliveryPointAsync(long userId, long? deliveryPointId, CancellationToken cancellationToken)
         {
             var user = await _repository.GetByIdAsync(userId);
             ArgumentNullException.ThrowIfNull(user, nameof(user));

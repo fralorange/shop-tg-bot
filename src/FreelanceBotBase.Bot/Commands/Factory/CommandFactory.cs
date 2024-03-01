@@ -24,13 +24,18 @@ using FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Facades;
 using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Repositories;
 using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Facades;
 using FreelanceBotBase.Bot.Commands.Text.GetUsers;
+using FreelanceBotBase.Bot.Commands.Text.GetCurrentId;
+using FreelanceBotBase.Bot.Commands.Text.AddDeliveryPoint;
+using FreelanceBotBase.Bot.Commands.Callback.CreateDP;
+using FreelanceBotBase.Bot.Commands.Text.GetDeliveryPoints;
+using FreelanceBotBase.Bot.Commands.Callback.AsignDp;
 
 namespace FreelanceBotBase.Bot.Commands.Factory
 {
     public class CommandFactory
     {
         private readonly ITelegramBotClient _botClient;
-        private readonly IBotStateService _botStateService;
+        private readonly IBotStateService _botStateService; // maybe store botState and init it in constructor but still inject service.
         private readonly IMemoryCache _cache;
         private readonly ICartService _cartService;
         private readonly IMapper _mapper;
@@ -72,7 +77,10 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             {
                 "/getproducts" => new GetProductsCommand(_botClient, _googleSheetsHelper, _cache, _mapper),
                 "/getcart" => new GetCartCommand(_botClient, _cartService),
+                "/getcurrentid" => new GetCurrentIdCommand(_botClient),
                 "/getusers" => new GetUsersCommand(_botClient, _userRepository, _mapper),
+                "/getdeliverypoints" => new GetDeliveryPointsCommand(_botClient, _deliveryPointRepository, _userRepository, _mapper),
+                "/createdp" => new AddDeliveryPointCommand(_botClient, _userRepository),
                 _ => new NullCommand()
             };
         }
@@ -92,7 +100,12 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 "delete" => new DeleteCallbackCommand(_botClient, _cartService, botState),
                 "clear" => new ClearCallbackCommand(_botClient, _cartService),
                 "back" => new BackCartCallbackCommand(_botClient, _cartService),
-                "checkout" => new CheckoutCallbackCommand(_botClient, _cartService, botState),
+                "checkout" => new CheckoutCallbackCommand(_botClient, _deliveryPointRepository, _mapper, botState),
+                "add_dp_name" => new AddFieldToDpCallbackCommand(_botClient, botState, _cache, commandParam, "Название"),
+                "add_dp_location" => new AddFieldToDpCallbackCommand(_botClient, botState, _cache, commandParam, "Локация"),
+                "create_dp" => new ConfirmDpConfigurationCallbackCommand(_botClient, _deliveryPointRepository),
+                "select_dp" => new AsignDeliveryPointCallbackCommand(_botClient, _deliveryPointFacade, _deliveryPointRepository, _userFacade, _userRepository, botState),
+                "clear_dp" => new ClearDeliveryPointCallbackCommand(_botClient, _deliveryPointFacade, _userFacade, _userRepository),
                 _ => new NullCallbackCommand()
             };
         }
@@ -107,7 +120,10 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 BotState.InputState.Search => new SearchCallbackCommand(_botClient, _cache, botState),
                 BotState.InputState.Selection => new SelectCallbackCommand(_botClient, _cache, botState),
                 BotState.InputState.Delete => new DeleteCallbackCommand(_botClient, _cartService, botState),
-                BotState.InputState.ChoosingDeliveryPoint => new CheckoutCallbackCommand(_botClient, _cartService, botState),
+                BotState.InputState.ChoosingDeliveryPoint => new CheckoutCallbackCommand(_botClient, _deliveryPointRepository, _mapper, botState),
+                BotState.InputState.EditingDpName => new AddFieldToDpCallbackCommand(_botClient, botState, _cache, "add_dp_name", "Название"),
+                BotState.InputState.EditingDpLocation => new AddFieldToDpCallbackCommand(_botClient, botState, _cache, "add_dp_location", "Локация"),
+                BotState.InputState.AsigningDpManager => new AsignDeliveryPointCallbackCommand(_botClient, _deliveryPointFacade, _deliveryPointRepository, _userFacade, _userRepository, botState),
                 _ => new NullCallbackCommand()
             };
         }
