@@ -4,10 +4,15 @@ using UserEntity = FreelanceBotBase.Domain.User.User;
 
 namespace FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Facades
 {
+    /// <inheritdoc cref="IUserFacade"/>
     public class UserFacade : IUserFacade
     {
         private readonly IRepository<UserEntity> _repository;
 
+        /// <summary>
+        /// Initializes user facade.
+        /// </summary>
+        /// <param name="repository"></param>
         public UserFacade(IRepository<UserEntity> repository)
             => _repository = repository;
 

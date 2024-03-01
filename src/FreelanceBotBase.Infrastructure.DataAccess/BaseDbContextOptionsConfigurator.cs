@@ -10,6 +10,10 @@ namespace FreelanceBotBase.Infrastructure.DataAccess
         private const string ConnectionStringName = "POSTGRES_DB";
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Creates new base db context configuration.
+        /// </summary>
+        /// <param name="configuration"></param>
         public BaseDbContextOptionsConfigurator(IConfiguration configuration)
             => _configuration = configuration;
 

@@ -3,10 +3,15 @@ using DeliveryPointEntity = FreelanceBotBase.Domain.DeliveryPoint.DeliveryPoint;
 
 namespace FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Facades
 {
+    /// <inheritdoc cref="IDeliveryPointFacade"/>
     public class DeliveryPointFacade : IDeliveryPointFacade
     {
         private readonly IRepository<DeliveryPointEntity> _repository;
 
+        /// <summary>
+        /// Initializes delivery point facade.
+        /// </summary>
+        /// <param name="repository"></param>
         public DeliveryPointFacade(IRepository<DeliveryPointEntity> repository)
             => _repository = repository;
 

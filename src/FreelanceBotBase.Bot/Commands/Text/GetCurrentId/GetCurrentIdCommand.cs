@@ -5,8 +5,15 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Text.GetCurrentId
 {
+    /// <summary>
+    /// Command to get current user's id.
+    /// </summary>
     public class GetCurrentIdCommand : CommandBase
     {
+        /// <summary>
+        /// Creates get current user id command.
+        /// </summary>
+        /// <param name="botClient"></param>
         public GetCurrentIdCommand(ITelegramBotClient botClient) : base(botClient) { } 
 
         public override Task<Message> ExecuteAsync(Message message, CancellationToken cancellationToken)

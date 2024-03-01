@@ -13,6 +13,11 @@ namespace FreelanceBotBase.Infrastructure.Helpers
         private readonly HttpClient _client;
         private readonly string _spreadsheetId;
 
+        /// <summary>
+        /// Creates new google sheets helper.
+        /// </summary>
+        /// <param name="clientFactory"></param>
+        /// <param name="configuration"></param>
         public GoogleSheetsHelper(IHttpClientFactory clientFactory, IConfiguration configuration)
         {
             _client = clientFactory.CreateClient("google_sheets_client");

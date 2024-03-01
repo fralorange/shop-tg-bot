@@ -3,6 +3,9 @@ using Telegram.Bot.Types;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Null
 {
+    /// <summary>
+    /// Null callback command.
+    /// </summary>
     public class NullCallbackCommand : ICallbackCommandWithInput
     {
         public Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)

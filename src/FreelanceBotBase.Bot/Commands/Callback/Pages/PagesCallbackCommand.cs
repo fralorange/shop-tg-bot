@@ -8,10 +8,21 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Pages
 {
+    /// <summary>
+    /// Callback command that implements pagination for product records.
+    /// </summary>
     public class PagesCallbackCommand : CallbackCommandBase
     {
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
 
+        /// <summary>
+        /// Creates new pagination callback command.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="cache"></param>
         public PagesCallbackCommand(ITelegramBotClient client, IMemoryCache cache) : base(client)
             => _cache = cache;
 

@@ -1,7 +1,6 @@
 ﻿using FreelanceBotBase.Bot.Commands.Base;
 using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Helpers;
-using FreelanceBotBase.Domain.Product;
 using FreelanceBotBase.Domain.State;
 using FreelanceBotBase.Infrastructure.Helpers;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,11 +10,26 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Search
 {
+    /// <summary>
+    /// Callback command that allows filter products records.
+    /// </summary>
     public class SearchCallbackCommand : CallbackCommandBase, ICallbackCommandWithInput
     {
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
+        /// <summary>
+        /// Bot state.
+        /// </summary>
         private readonly BotState _botState;
 
+        /// <summary>
+        /// Creates new search callback command.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="cache"></param>
+        /// <param name="botState"></param>
         public SearchCallbackCommand(ITelegramBotClient client, IMemoryCache cache, BotState botState) : base(client)
         {
             _cache = cache;

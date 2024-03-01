@@ -7,10 +7,21 @@ using Telegram.Bot.Types;
 
 namespace FreelanceBotBase.Bot.Commands.Text.AddDeliveryPoint
 {
+    /// <summary>
+    /// Command to create menu for add new delivery point operation.
+    /// </summary>
     public class AddDeliveryPointCommand : CommandBase
     {
+        /// <summary>
+        /// User repository.
+        /// </summary>
         private readonly IUserRepository _userRepository;
 
+        /// <summary>
+        /// Creates add delivery point command.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="userRepository"></param>
         public AddDeliveryPointCommand(ITelegramBotClient botClient, IUserRepository userRepository) : base(botClient)
             => _userRepository = userRepository;
 

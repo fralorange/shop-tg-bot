@@ -11,14 +11,41 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.AsignDp
 {
+    /// <summary>
+    /// Asign delivery point to manager callback command.
+    /// </summary>
     public class AsignDeliveryPointCallbackCommand : CallbackCommandBase, ICallbackCommandWithInput
     {
+        /// <summary>
+        /// Delivery point facade.
+        /// </summary>
         private readonly IDeliveryPointFacade _deliveryPointFacade;
+        /// <summary>
+        /// Delivery point repository.
+        /// </summary>
         private readonly IDeliveryPointRepository _deliveryPointRepository;
+        /// <summary>
+        /// User facade.
+        /// </summary>
         private readonly IUserFacade _userFacade;
+        /// <summary>
+        /// User repository.
+        /// </summary>
         private readonly IUserRepository _userRepository;
+        /// <summary>
+        /// Bot state.
+        /// </summary>
         private readonly BotState _botState;
 
+        /// <summary>
+        /// Creates callback command that asigns delivery point to a new manager.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="deliveryPointFacade"></param>
+        /// <param name="deliveryPointRepository"></param>
+        /// <param name="userFacade"></param>
+        /// <param name="userRepository"></param>
+        /// <param name="botState"></param>
         public AsignDeliveryPointCallbackCommand(
             ITelegramBotClient botClient,
             IDeliveryPointFacade deliveryPointFacade,
@@ -35,6 +62,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AsignDp
             _botState = botState;
         }
 
+        /// <inheritdoc/>
         public override async Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         { 
             _botState.CurrentState = BotState.State.AwaitingInput;
@@ -47,6 +75,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AsignDp
                 cancellationToken: cancellationToken);
         }
 
+        /// <inheritdoc/>
         public async Task<Message> HandleUserInput(string userInput, Message message, CancellationToken cancellationToken)
         {
             _botState.CurrentState = BotState.State.Default;

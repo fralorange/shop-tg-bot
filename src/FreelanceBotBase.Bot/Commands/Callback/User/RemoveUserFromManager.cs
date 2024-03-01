@@ -10,11 +10,26 @@ using UserEntity = FreelanceBotBase.Domain.User.User;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.User
 {
+    /// <summary>
+    /// Callback command that allows to remove user from manager spot.
+    /// </summary>
     public class RemoveUserFromManager : CallbackCommandBase, ICallbackCommandWithInput
     {
+        /// <summary>
+        /// User repository.
+        /// </summary>
         private readonly IUserRepository _userRepository;
+        /// <summary>
+        /// Bot state.
+        /// </summary>
         private readonly BotState _botState;
 
+        /// <summary>
+        /// Creates callback command that allows to remove user from manager spot.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="userRepository"></param>
+        /// <param name="botState"></param>
         public RemoveUserFromManager(ITelegramBotClient botClient, IUserRepository userRepository, BotState botState) : base(botClient)
         {
             _userRepository = userRepository;

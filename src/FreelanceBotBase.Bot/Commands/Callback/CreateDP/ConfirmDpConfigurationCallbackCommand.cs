@@ -8,10 +8,21 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.CreateDP
 {
+    /// <summary>
+    /// Callback command to confirm configuration for new delivery point.
+    /// </summary>
     public class ConfirmDpConfigurationCallbackCommand : CallbackCommandBase
     {
+        /// <summary>
+        /// Delivery point repository.
+        /// </summary>
         private readonly IDeliveryPointRepository _deliveryPointRepository;
 
+        /// <summary>
+        /// Creates new confirm delivery point configuration callback command.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="deliveryPointRepository"></param>
         public ConfirmDpConfigurationCallbackCommand(ITelegramBotClient botClient, IDeliveryPointRepository deliveryPointRepository)
             : base(botClient)
             => _deliveryPointRepository = deliveryPointRepository;

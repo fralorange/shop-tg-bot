@@ -4,6 +4,9 @@ using UserEntity = FreelanceBotBase.Domain.User.User;
 
 namespace FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.User
 {
+    /// <summary>
+    /// User mapper profile.
+    /// </summary>
     public class UserMapper : Profile
     {
         public UserMapper()

@@ -21,7 +21,7 @@ namespace FreelanceBotBase.Bot.Helpers
             => records.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
         /// <summary>
-        /// Format data by hard-coded pattern.
+        /// Format data by hard-coded pattern for product records.
         /// </summary>
         /// <param name="records">Records that are being formatted.</param>
         /// <returns>Formatted data.</returns>
@@ -31,12 +31,22 @@ namespace FreelanceBotBase.Bot.Helpers
             return string.Join('\n' + separator + '\n', records.Select(r => $"Продукт: {r.Product}\nЦена: {r.Cost}"));
         }
 
+        /// <summary>
+        /// Format data by hard-coded pattern for users.
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
         public static string Format(IEnumerable<UserDto> users)
         {
             string separator = new('-', 90);
             return string.Join('\n' + separator + '\n', users.Select(u => $"Id: {u.UserId}\nРоль: {(Domain.User.User.Role)u.UserRole}"));
         }
 
+        /// <summary>
+        /// Format data by hard-coded pattern for delivery points.
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
         public static string Format(IEnumerable<DeliveryPointDto> points)
         {
             var separator = new string('-', 90);

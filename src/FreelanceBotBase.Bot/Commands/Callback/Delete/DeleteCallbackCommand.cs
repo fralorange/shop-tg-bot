@@ -5,15 +5,29 @@ using FreelanceBotBase.Bot.Services.Cart;
 using FreelanceBotBase.Domain.State;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Delete
 {
+    /// <summary>
+    /// Delete from cart callback command.
+    /// </summary>
     public class DeleteCallbackCommand : CallbackCommandBase, ICallbackCommandWithInput
     {
+        /// <summary>
+        /// Cart service to manage user carts.
+        /// </summary>
         private readonly ICartService _cartService;
+        /// <summary>
+        /// Bot state.
+        /// </summary>
         private readonly BotState _botState;
 
+        /// <summary>
+        /// Creates new callback command that allows user delete product from cart.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="cartService"></param>
+        /// <param name="botState"></param>
         public DeleteCallbackCommand(ITelegramBotClient botClient, ICartService cartService, BotState botState) : base(botClient)
         {
             _cartService = cartService;

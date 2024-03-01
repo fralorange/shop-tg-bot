@@ -2,6 +2,9 @@
 {
     public class BotState
     {
+        /// <summary>
+        /// Bot main state.
+        /// </summary>
         public enum State
         {
             Default,
@@ -9,6 +12,9 @@
             Chatting,
         }
 
+        /// <summary>
+        /// Bot input state.
+        /// </summary>
         public enum InputState
         {
             None,
@@ -23,7 +29,13 @@
             AsigningDpManager
         }
 
+        /// <summary>
+        /// Bot main current state.
+        /// </summary>
         public State CurrentState { get; set; } = State.Default;
+        /// <summary>
+        /// Bot input current state.
+        /// </summary>
         public InputState AwaitingInputState { get; set; } = InputState.None;
     }
 }

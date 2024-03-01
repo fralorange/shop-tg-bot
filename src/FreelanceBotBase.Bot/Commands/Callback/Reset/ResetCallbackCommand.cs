@@ -8,11 +8,26 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Reset
 {
+    /// <summary>
+    /// Callback command that returns original sequence of pages from google sheets. 
+    /// </summary>
     public class ResetCallbackCommand : CallbackCommandBase
     {
+        /// <summary>
+        /// Google sheets helper.
+        /// </summary>
         private readonly GoogleSheetsHelper _googleSheetsHelper;
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
 
+        /// <summary>
+        /// Creates new reset callback command.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="googleSheetsHelper"></param>
+        /// <param name="cache"></param>
         public ResetCallbackCommand(ITelegramBotClient client, GoogleSheetsHelper googleSheetsHelper, IMemoryCache cache) : base(client)
         {
             _googleSheetsHelper = googleSheetsHelper;

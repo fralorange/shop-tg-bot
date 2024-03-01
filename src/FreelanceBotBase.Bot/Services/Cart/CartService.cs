@@ -11,7 +11,10 @@ namespace FreelanceBotBase.Bot.Services.Cart
         private readonly ConcurrentDictionary<long, List<ProductRecord>> _carts;
         private readonly IMapper _mapper;
 
-        /// <inheritdoc cref="ICartService"/>
+        /// <summary>
+        /// Initializes cart service.
+        /// </summary>
+        /// <param name="mapper"></param>
         public CartService(IMapper mapper)
         {
             _carts = new ConcurrentDictionary<long, List<ProductRecord>>();

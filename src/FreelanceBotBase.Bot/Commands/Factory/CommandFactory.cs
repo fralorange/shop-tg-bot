@@ -32,21 +32,68 @@ using FreelanceBotBase.Bot.Commands.Callback.AsignDp;
 
 namespace FreelanceBotBase.Bot.Commands.Factory
 {
+    /// <summary>
+    /// Command factory<br/>
+    /// One factory to rule them all!
+    /// </summary>
     public class CommandFactory
     {
+        /// <summary>
+        /// Bot client.
+        /// </summary>
         private readonly ITelegramBotClient _botClient;
-        private readonly IBotStateService _botStateService; // maybe store botState and init it in constructor but still inject service.
+        /// <summary>
+        /// Bot state service.
+        /// </summary>
+        private readonly IBotStateService _botStateService; // maybe store botState and init it in constructor but still inject service.       
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
+        /// <summary>
+        /// Cart service.
+        /// </summary>
         private readonly ICartService _cartService;
+        /// <summary>
+        /// Mapper.
+        /// </summary>
         private readonly IMapper _mapper;
+        /// <summary>
+        /// Google sheets helper.
+        /// </summary>
         private readonly GoogleSheetsHelper _googleSheetsHelper;
         #region Repos and Facades
+        /// <summary>
+        /// Deliver point repository.
+        /// </summary>
         private readonly IDeliveryPointRepository _deliveryPointRepository;
+        /// <summary>
+        /// Delivery point facade.
+        /// </summary>
         private readonly IDeliveryPointFacade _deliveryPointFacade;
+        /// <summary>
+        /// User repository.
+        /// </summary>
         private readonly IUserRepository _userRepository;
+        /// <summary>
+        /// User facade.
+        /// </summary>
         private readonly IUserFacade _userFacade;
         #endregion
 
+        /// <summary>
+        /// Creates mew factory.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="cache"></param>
+        /// <param name="botStateService"></param>
+        /// <param name="cartService"></param>
+        /// <param name="mapper"></param>
+        /// <param name="googleSheetsHelper"></param>
+        /// <param name="deliveryPointRepository"></param>
+        /// <param name="deliveryPointFacade"></param>
+        /// <param name="userRepository"></param>
+        /// <param name="userFacade"></param>
         public CommandFactory(
             ITelegramBotClient botClient,
             IMemoryCache cache,
@@ -71,6 +118,11 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             _userFacade = userFacade;
         }
 
+        /// <summary>
+        /// Creates new command.
+        /// </summary>
+        /// <param name="commandName">Command prefix and name.</param>
+        /// <returns>New command <see cref="ICommand"/></returns>
         public ICommand CreateCommand(string commandName)
         {
             return commandName switch
@@ -85,6 +137,12 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             };
         }
 
+        /// <summary>
+        /// Creates new callback command.
+        /// </summary>
+        /// <param name="commandParam">Command data.</param>
+        /// <param name="chatId">Chat to init user's chatbot state.</param>
+        /// <returns></returns>
         public ICallbackCommand CreateCallbackCommand(string commandParam, long chatId)
         {
             var botState = _botStateService.GetOrCreateBotState(chatId);
@@ -111,6 +169,12 @@ namespace FreelanceBotBase.Bot.Commands.Factory
         }
 
         // Maybe refactor and remove this method somehow since it overextends factory imo.
+        /// <summary>
+        /// Create new callback command with user input.
+        /// </summary>
+        /// <param name="inputState">Input state.</param>
+        /// <param name="chatId">Chat to init user's chatbot state.</param>
+        /// <returns></returns>
         public ICallbackCommandWithInput CreateCallbackCommandWithUserInput(BotState.InputState inputState, long chatId)
         {
             var botState = _botStateService.GetOrCreateBotState(chatId);
