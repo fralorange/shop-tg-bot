@@ -9,12 +9,31 @@ using Telegram.Bot.Types;
 
 namespace FreelanceBotBase.Bot.Commands.Text.GetProducts
 {
+    /// <summary>
+    /// Command that sends sequence of products to user.
+    /// </summary>
     public class GetProductsCommand : CommandBase
     {
+        /// <summary>
+        /// Google sheets helper.
+        /// </summary>
         private readonly GoogleSheetsHelper _googleSheetsHelper;
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
+        /// <summary>
+        /// Mapper.
+        /// </summary>
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Creates command that gets products.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="googleSheetsHelper"></param>
+        /// <param name="cache"></param>
+        /// <param name="mapper"></param>
         public GetProductsCommand(ITelegramBotClient client, GoogleSheetsHelper googleSheetsHelper, IMemoryCache cache, IMapper mapper) : base(client)
         {
             _googleSheetsHelper = googleSheetsHelper;

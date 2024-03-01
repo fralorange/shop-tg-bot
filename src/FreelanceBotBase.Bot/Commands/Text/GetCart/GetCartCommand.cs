@@ -6,10 +6,21 @@ using Telegram.Bot.Types;
 
 namespace FreelanceBotBase.Bot.Commands.Text.GetCart
 {
+    /// <summary>
+    /// Command to get user's cart.
+    /// </summary>
     public class GetCartCommand : CommandBase
     {
+        /// <summary>
+        /// Cart service.
+        /// </summary>
         private readonly ICartService _cartService;
 
+        /// <summary>
+        /// Creates new get cart command.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="cartService"></param>
         public GetCartCommand(ITelegramBotClient botClient, ICartService cartService) : base(botClient)
         {
             _cartService = cartService;

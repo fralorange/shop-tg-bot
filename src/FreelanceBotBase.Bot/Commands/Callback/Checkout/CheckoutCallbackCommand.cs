@@ -10,12 +10,31 @@ using Telegram.Bot.Types;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Checkout
 {
+    /// <summary>
+    /// Checkout callback command.
+    /// </summary>
     public class CheckoutCallbackCommand : CallbackCommandBase, ICallbackCommandWithInput
     {
+        /// <summary>
+        /// Delivery point repository.
+        /// </summary>
         private readonly IDeliveryPointRepository _deliveryPointRepository;
+        /// <summary>
+        /// Mapper.
+        /// </summary>
         private readonly IMapper _mapper;
+        /// <summary>
+        /// Bot state.
+        /// </summary>
         private readonly BotState _botState;
 
+        /// <summary>
+        /// Creates checkout callback command.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="deliveryPointRepository"></param>
+        /// <param name="mapper"></param>
+        /// <param name="botState"></param>
         public CheckoutCallbackCommand(
             ITelegramBotClient botClient,
             IDeliveryPointRepository deliveryPointRepository,
@@ -27,6 +46,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Checkout
             _botState = botState;
         }
 
+        /// <inheritdoc/>
         public async override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         {
             var deliveryPoints = await _deliveryPointRepository.GetAll();
@@ -45,6 +65,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Checkout
                 cancellationToken: cancellationToken);
         }
 
+        /// <inheritdoc/>
         public async Task<Message> HandleUserInput(string userInput, Message message, CancellationToken cancellationToken)
         {
             _botState.CurrentState = BotState.State.Default; // change to Chatting l8r when Admin responds

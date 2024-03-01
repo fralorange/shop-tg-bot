@@ -3,11 +3,16 @@ using System.Linq.Expressions;
 
 namespace FreelanceBotBase.Infrastructure.Repository
 {
+    /// <inheritdoc cref="IRepository{TEntity}"/>
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected DbContext DbContext { get; }
         protected DbSet<TEntity> DbSet { get; }
 
+        /// <summary>
+        /// Initializes base repository.
+        /// </summary>
+        /// <param name="dbContext"></param>
         public Repository(DbContext dbContext)
         {
             DbContext = dbContext;

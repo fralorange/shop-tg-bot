@@ -131,6 +131,10 @@ namespace FreelanceBotBase.Bot.Helpers
             });
         }
 
+        /// <summary>
+        /// Creates keyboard for get users command.
+        /// </summary>
+        /// <returns></returns>
         public static InlineKeyboardMarkup CreateGetUsersInlineKeyboard()
         {
             return new InlineKeyboardMarkup(new[]
@@ -148,6 +152,10 @@ namespace FreelanceBotBase.Bot.Helpers
             });
         }
 
+        /// <summary>
+        /// Creates keyboard to display controls of creating new delivery point.
+        /// </summary>
+        /// <returns></returns>
         public static InlineKeyboardMarkup CreateAddNewDpInlineKeyboard()
         {
             return new InlineKeyboardMarkup(new[]
@@ -167,6 +175,10 @@ namespace FreelanceBotBase.Bot.Helpers
             });
         }
 
+        /// <summary>
+        /// Creates keyboard for get delivery points command.
+        /// </summary>
+        /// <returns></returns>
         public static InlineKeyboardMarkup CreateGetDeliveryPointsInlineKeyboard()
         {
             return new InlineKeyboardMarkup(new[]

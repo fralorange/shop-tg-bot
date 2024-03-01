@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Configuration
 {
+    /// <summary>
+    /// Delivery point EF Core configuration.
+    /// </summary>
     public class DeliveryPointConfiguration : IEntityTypeConfiguration<Domain.DeliveryPoint.DeliveryPoint>
     {
         public void Configure(EntityTypeBuilder<Domain.DeliveryPoint.DeliveryPoint> builder)

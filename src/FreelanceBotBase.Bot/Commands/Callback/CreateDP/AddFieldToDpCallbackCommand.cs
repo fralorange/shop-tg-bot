@@ -10,13 +10,36 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.CreateDP
 {
+    /// <summary>
+    /// Callback command to add/edit field while creating delivery point.
+    /// </summary>
     public class AddFieldToDpCallbackCommand : CallbackCommandBase, ICallbackCommandWithInput
     {
+        /// <summary>
+        /// Bot state.
+        /// </summary>
         private readonly BotState _botState;
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
+        /// <summary>
+        /// Cache key.
+        /// </summary>
         private readonly string _cacheKey;
+        /// <summary>
+        /// Field.
+        /// </summary>
         private readonly string _field;
 
+        /// <summary>
+        /// Creates new callback command that edits current field in new delivery point.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="botState"></param>
+        /// <param name="cache"></param>
+        /// <param name="cacheKey"></param>
+        /// <param name="field"></param>
         public AddFieldToDpCallbackCommand(ITelegramBotClient botClient, BotState botState, IMemoryCache cache, string cacheKey, string field) 
             : base(botClient)
         {

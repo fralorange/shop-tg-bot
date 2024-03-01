@@ -4,10 +4,15 @@ using DeliveryPointEntity = FreelanceBotBase.Domain.DeliveryPoint.DeliveryPoint;
 
 namespace FreelanceBotBase.Infrastructure.DataAccess.Contexts.DeliveryPoint.Repositories
 {
+    /// <inheritdoc cref="IDeliveryPointRepository"/>
     public class DeliveryPointRepository : IDeliveryPointRepository
     {
         private readonly IRepository<DeliveryPointEntity> _repository;
 
+        /// <summary>
+        /// Initializes. new delivery point repository.
+        /// </summary>
+        /// <param name="repository"></param>
         public DeliveryPointRepository(IRepository<DeliveryPointEntity> repository)
             => _repository = repository;
 

@@ -5,6 +5,9 @@ using ProductEntity = FreelanceBotBase.Domain.Product.ProductRecord;
 
 namespace FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.Product
 {
+    /// <summary>
+    /// Product mapper profile.
+    /// </summary>
     public class ProductMapper : Profile
     {
         public ProductMapper()

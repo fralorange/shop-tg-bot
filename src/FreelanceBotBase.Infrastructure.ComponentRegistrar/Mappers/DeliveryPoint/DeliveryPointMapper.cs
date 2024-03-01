@@ -5,6 +5,9 @@ using DeliveryPointEntity = FreelanceBotBase.Domain.DeliveryPoint.DeliveryPoint;
 
 namespace FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.DeliveryPoint
 {
+    /// <summary>
+    /// Delivery point mapper profile.
+    /// </summary>
     public class DeliveryPointMapper : Profile
     {
         public DeliveryPointMapper()

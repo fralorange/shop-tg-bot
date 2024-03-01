@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using FreelanceBotBase.Bot.Commands.Base;
+﻿using FreelanceBotBase.Bot.Commands.Base;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Bot.Services.Cart;
 using FreelanceBotBase.Contracts.Product;
-using FreelanceBotBase.Domain.Product;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.RegularExpressions;
 using Telegram.Bot;
@@ -12,17 +10,33 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.AddProduct
 {
+    /// <summary>
+    /// Add product to cart callback command.
+    /// </summary>
     public class AddProductCallbackCommand : CallbackCommandBase
     {
+        /// <summary>
+        /// Cart service to manage products in user's cart.
+        /// </summary>
         private readonly ICartService _cartService;
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
 
+        /// <summary>
+        /// Create callback command that adds products to cart.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="cartSerivce"></param>
+        /// <param name="cache"></param>
         public AddProductCallbackCommand(ITelegramBotClient botClient, ICartService cartSerivce, IMemoryCache cache) : base(botClient)
         {
             _cartService = cartSerivce;
             _cache = cache;
         }
 
+        /// <inheritdoc/>
         public async override Task<Message> HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         {
             var cart = _cartService.Get(callbackQuery.From.Id);
@@ -52,8 +66,8 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AddProduct
 
             string pattern = "\"([^\"]*)\"";
             Match match = Regex.Match(callbackQuery.Message!.Text!, pattern);
-            if (match.Success) 
-            { 
+            if (match.Success)
+            {
                 productName = match.Groups[1].Value;
             }
 

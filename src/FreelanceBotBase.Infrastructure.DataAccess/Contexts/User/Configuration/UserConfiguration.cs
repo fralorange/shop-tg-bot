@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Configuration
 {
+    /// <summary>
+    /// User EF Core configuration.
+    /// </summary>
     public class UserConfiguration : IEntityTypeConfiguration<Domain.User.User>
     {
         public void Configure(EntityTypeBuilder<Domain.User.User> builder)

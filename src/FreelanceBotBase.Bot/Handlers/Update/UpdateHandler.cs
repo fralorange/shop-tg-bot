@@ -11,13 +11,33 @@ using Telegram.Bot.Types.InlineQueryResults;
 
 namespace FreelanceBotBase.Bot.Handlers.Update
 {
+    /// <inheritdoc cref="IUpdateHandler"/>
     public class UpdateHandler : IUpdateHandler
     {
+        /// <summary>
+        /// Telegram Bot Client.
+        /// </summary>
         private readonly ITelegramBotClient _botClient;
+        /// <summary>
+        /// Microsoft Logger.
+        /// </summary>
         private readonly ILogger<UpdateHandler> _logger;
+        /// <summary>
+        /// Bot state service.
+        /// </summary>
         private readonly IBotStateService _botStateService;
+        /// <summary>
+        /// Commands factory.
+        /// </summary>
         private readonly CommandFactory _commandFactory;
 
+        /// <summary>
+        /// Initializes new update handler.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="logger"></param>
+        /// <param name="botStateService"></param>
+        /// <param name="commandFactory"></param>
         public UpdateHandler(ITelegramBotClient botClient, ILogger<UpdateHandler> logger, IBotStateService botStateService, CommandFactory commandFactory)
         {
             _botClient = botClient;
@@ -41,6 +61,12 @@ namespace FreelanceBotBase.Bot.Handlers.Update
             await handler;
         }
         #region Bot Processors
+        /// <summary>
+        /// Processes messages.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private async Task BotOnMessageReceived(Message message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Receive message type: {MessageType}", message.Type);
@@ -64,6 +90,12 @@ namespace FreelanceBotBase.Bot.Handlers.Update
             _logger.LogInformation("The message was sent with id: {SentMessageId}", sentMessage.MessageId);
         }
 
+        /// <summary>
+        /// Processes callback queries.
+        /// </summary>
+        /// <param name="callbackQuery"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private async Task BotOnCallbackQueryReceived(CallbackQuery callbackQuery, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received inline keyboard callback from {CallbackQueryId}", callbackQuery.Id);
@@ -78,6 +110,12 @@ namespace FreelanceBotBase.Bot.Handlers.Update
             }
         }
 
+        /// <summary>
+        /// Processes inline queries.
+        /// </summary>
+        /// <param name="inlineQuery"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private async Task BotOnInlineQueryReceived(InlineQuery inlineQuery, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received inline query from {InlineQueryFromId}", inlineQuery.From.Id);
@@ -98,6 +136,12 @@ namespace FreelanceBotBase.Bot.Handlers.Update
                 cancellationToken: cancellationToken);
         }
 
+        /// <summary>
+        /// Processes chosen inline results.
+        /// </summary>
+        /// <param name="chosenInlineResult"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private async Task BotOnChosenInlineResultReceived(ChosenInlineResult chosenInlineResult, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received inline result: {ChosedInlineResultId}", chosenInlineResult.ResultId);
@@ -108,6 +152,12 @@ namespace FreelanceBotBase.Bot.Handlers.Update
                 cancellationToken: cancellationToken);
         }
 
+        /// <summary>
+        /// Processes unknown updates.
+        /// </summary>
+        /// <param name="update"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         private Task UnknownUpdateHandlerAsync(Telegram.Bot.Types.Update update, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);

@@ -6,15 +6,29 @@ using FreelanceBotBase.Contracts.User;
 using FreelanceBotBase.Infrastructure.DataAccess.Contexts.User.Repositories;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Text.GetUsers
 {
+    /// <summary>
+    /// Command that sends sequence of users to owner.
+    /// </summary>
     public class GetUsersCommand : CommandBase
     {
+        /// <summary>
+        /// User repository.
+        /// </summary>
         private readonly IUserRepository _userRepository;
+        /// <summary>
+        /// Mapper.
+        /// </summary>
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Creates get users command.
+        /// </summary>
+        /// <param name="botClient"></param>
+        /// <param name="userRepository"></param>
+        /// <param name="mapper"></param>
         public GetUsersCommand(ITelegramBotClient botClient, IUserRepository userRepository, IMapper mapper) : base(botClient)
         {
             _userRepository = userRepository;

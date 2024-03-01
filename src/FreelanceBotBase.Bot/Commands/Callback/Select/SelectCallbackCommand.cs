@@ -2,7 +2,6 @@
 using FreelanceBotBase.Bot.Commands.Interface;
 using FreelanceBotBase.Bot.Helpers;
 using FreelanceBotBase.Contracts.Product;
-using FreelanceBotBase.Domain.Product;
 using FreelanceBotBase.Domain.State;
 using Microsoft.Extensions.Caching.Memory;
 using Telegram.Bot;
@@ -11,11 +10,26 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FreelanceBotBase.Bot.Commands.Callback.Select
 {
+    /// <summary>
+    /// Callback command that selects products.
+    /// </summary>
     public class SelectCallbackCommand : CallbackCommandBase, ICallbackCommandWithInput
     {
+        /// <summary>
+        /// Memory cache.
+        /// </summary>
         private readonly IMemoryCache _cache;
+        /// <summary>
+        /// Bot state.
+        /// </summary>
         private readonly BotState _botState;
 
+        /// <summary>
+        /// Creates new select callback command.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="cache"></param>
+        /// <param name="botState"></param>
         public SelectCallbackCommand(ITelegramBotClient client, IMemoryCache cache, BotState botState) : base(client)
         {
             _cache = cache;
@@ -55,8 +69,8 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Select
 
             var product = records.FirstOrDefault(r => r.Product.Contains(userInput));
 
-            var keyboard = product != null 
-                ? InlineKeyboardHelper.CreateSelectInlineKeyboard() 
+            var keyboard = product != null
+                ? InlineKeyboardHelper.CreateSelectInlineKeyboard()
                 : InlineKeyboardHelper.CreateResetInlineKeyboard();
             var output = product != null ?
                 $"Вы выбрали: \"{product.Product}\"\nПодтвердите свой выбор!"
