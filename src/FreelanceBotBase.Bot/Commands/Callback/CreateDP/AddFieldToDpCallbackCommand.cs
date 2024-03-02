@@ -86,7 +86,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.CreateDP
                     cancellationToken: cancellationToken);
             }
 
-            var inlineKeyboard = InlineKeyboardHelper.CreateAddNewDpInlineKeyboard();
+            var inlineKeyboard = KeyboardHelper.CreateAddNewDpInlineKeyboard();
 
             if (!Regex.IsMatch(userInput, @"^[а-яА-Яa-zA-Z0-9\s.,]+$") || userInput.Contains('\n'))
             {

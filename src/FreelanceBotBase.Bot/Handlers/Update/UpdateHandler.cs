@@ -81,10 +81,14 @@ namespace FreelanceBotBase.Bot.Handlers.Update
                 ICommand command = _commandFactory.CreateCommand(messageText.Split(' ')[0]);
                 sentMessage = await command.ExecuteAsync(message, cancellationToken);
             }
-            else
+            else if (botState.CurrentState == BotState.State.AwaitingInput)
             {
                 ICallbackCommandWithInput command = _commandFactory.CreateCallbackCommandWithUserInput(botState.AwaitingInputState, message.Chat.Id);
                 sentMessage = await command.HandleUserInput(messageText, message, cancellationToken);
+            } else
+            {
+                ICommand chatCommand = _commandFactory.CreateChatCommand(messageText);
+                sentMessage = await chatCommand.ExecuteAsync(message, cancellationToken);
             }
 
             _logger.LogInformation("The message was sent with id: {SentMessageId}", sentMessage.MessageId);

@@ -29,6 +29,11 @@ using FreelanceBotBase.Bot.Commands.Text.AddDeliveryPoint;
 using FreelanceBotBase.Bot.Commands.Callback.CreateDP;
 using FreelanceBotBase.Bot.Commands.Text.GetDeliveryPoints;
 using FreelanceBotBase.Bot.Commands.Callback.AsignDp;
+using FreelanceBotBase.Bot.Commands.Callback.User;
+using FreelanceBotBase.Bot.Commands.Callback.Notification;
+using FreelanceBotBase.Bot.Services.Chat;
+using FreelanceBotBase.Bot.Commands.Callback.Chat;
+using FreelanceBotBase.Bot.Commands.Text.Chat;
 
 namespace FreelanceBotBase.Bot.Commands.Factory
 {
@@ -54,6 +59,10 @@ namespace FreelanceBotBase.Bot.Commands.Factory
         /// Cart service.
         /// </summary>
         private readonly ICartService _cartService;
+        /// <summary>
+        /// Chat service.
+        /// </summary>
+        private readonly IChatService _chatService;
         /// <summary>
         /// Mapper.
         /// </summary>
@@ -94,6 +103,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
         /// <param name="deliveryPointFacade"></param>
         /// <param name="userRepository"></param>
         /// <param name="userFacade"></param>
+        /// <param name="chatService"></param>
         public CommandFactory(
             ITelegramBotClient botClient,
             IMemoryCache cache,
@@ -104,7 +114,8 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             IDeliveryPointRepository deliveryPointRepository,
             IDeliveryPointFacade deliveryPointFacade,
             IUserRepository userRepository,
-            IUserFacade userFacade)
+            IUserFacade userFacade,
+            IChatService chatService)
         {
             _botClient = botClient;
             _botStateService = botStateService;
@@ -116,6 +127,7 @@ namespace FreelanceBotBase.Bot.Commands.Factory
             _deliveryPointFacade = deliveryPointFacade;
             _userRepository = userRepository;
             _userFacade = userFacade;
+            _chatService = chatService;
         }
 
         /// <summary>
@@ -164,6 +176,10 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 "create_dp" => new ConfirmDpConfigurationCallbackCommand(_botClient, _deliveryPointRepository),
                 "select_dp" => new AsignDeliveryPointCallbackCommand(_botClient, _deliveryPointFacade, _deliveryPointRepository, _userFacade, _userRepository, botState),
                 "clear_dp" => new ClearDeliveryPointCallbackCommand(_botClient, _deliveryPointFacade, _userFacade, _userRepository),
+                "add_manager" => new AddUserAsManager(_botClient, _userRepository, botState),
+                "remove_manager" => new RemoveUserFromManager(_botClient, _userRepository, botState),
+                "notification" => new NotificationCallbackCommand(_botClient, _deliveryPointRepository),
+                "chat" => new ChatCallbackCommand(_botClient, _chatService, _botStateService, _cartService),
                 _ => new NullCallbackCommand()
             };
         }
@@ -188,7 +204,18 @@ namespace FreelanceBotBase.Bot.Commands.Factory
                 BotState.InputState.EditingDpName => new AddFieldToDpCallbackCommand(_botClient, botState, _cache, "add_dp_name", "Название"),
                 BotState.InputState.EditingDpLocation => new AddFieldToDpCallbackCommand(_botClient, botState, _cache, "add_dp_location", "Локация"),
                 BotState.InputState.AsigningDpManager => new AsignDeliveryPointCallbackCommand(_botClient, _deliveryPointFacade, _deliveryPointRepository, _userFacade, _userRepository, botState),
+                BotState.InputState.AddingUser => new AddUserAsManager(_botClient, _userRepository, botState),
+                BotState.InputState.RemovingUser => new RemoveUserFromManager(_botClient, _userRepository, botState),
                 _ => new NullCallbackCommand()
+            };
+        }
+
+        public ICommand CreateChatCommand(string commandName)
+        {
+            return commandName switch
+            {
+                "Завершить сессию чата" => new DisconnectChatSessionCommand(_botClient, _chatService, _botStateService),
+                _ => new RespondChatMessageCommand(_botClient, _chatService)
             };
         }
     }

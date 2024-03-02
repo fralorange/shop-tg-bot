@@ -70,8 +70,8 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Select
             var product = records.FirstOrDefault(r => r.Product.Contains(userInput));
 
             var keyboard = product != null
-                ? InlineKeyboardHelper.CreateSelectInlineKeyboard()
-                : InlineKeyboardHelper.CreateResetInlineKeyboard();
+                ? KeyboardHelper.CreateSelectInlineKeyboard()
+                : KeyboardHelper.CreateResetInlineKeyboard();
             var output = product != null ?
                 $"Вы выбрали: \"{product.Product}\"\nПодтвердите свой выбор!"
                 : "Не найдено!";

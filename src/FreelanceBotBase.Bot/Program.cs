@@ -24,6 +24,7 @@ using Microsoft.Extensions.Hosting;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using FreelanceBotBase.Infrastructure.ComponentRegistrar.Mappers.DeliveryPoint;
+using FreelanceBotBase.Bot.Services.Chat;
 // to-do: create clean architecture.
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -81,6 +82,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<GoogleSheetsHelper>();
         services.AddScoped<CommandFactory>();
         services.AddSingleton<IBotStateService, BotStateService>();
+        services.AddSingleton<IChatService, ChatService>();
         services.AddSingleton<ICartService, CartService>();
         services.AddScoped<UpdateHandler>();
         services.AddScoped<ReceiverService>();

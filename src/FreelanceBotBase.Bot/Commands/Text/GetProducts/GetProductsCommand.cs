@@ -60,7 +60,7 @@ namespace FreelanceBotBase.Bot.Commands.Text.GetProducts
 
             var paginatedRecords = PaginationHelper.SplitByPages(recordsDto, 10, currentPage);
             var output = PaginationHelper.Format(paginatedRecords);
-            var inlineKeyboard = InlineKeyboardHelper.CreateDefaultInlineKeyboard();
+            var inlineKeyboard = KeyboardHelper.CreateDefaultInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,

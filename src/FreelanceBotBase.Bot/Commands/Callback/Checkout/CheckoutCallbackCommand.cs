@@ -77,18 +77,18 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Checkout
                 return await BotClient.SendTextMessageAsync(
                     chatId: chatId,
                     text: "Ошибка: ожидалось число, но получено другое значение. Пожалуйста введите число!",
-                    replyMarkup: InlineKeyboardHelper.CreateBackInlineKeyboard(),
+                    replyMarkup: KeyboardHelper.CreateBackInlineKeyboard(),
                     cancellationToken: cancellationToken);
 
             var deliveryPoints = await _deliveryPointRepository.GetAll();
             var deliveryPoint = deliveryPoints.First(dp => dp.Id.Equals(dpId));
 
-            var output = $"Вы выбрали пункт выдачи \"{deliveryPoint.Name}\" находящийся по адресу: \"{deliveryPoint.Location}\"\n";
-            var inlineKeyboard = InlineKeyboardHelper.CreateConfirmChattingInlineKeyabord();
+            var output = $"Вы выбрали пункт выдачи №{deliveryPoint.Id}, \"{deliveryPoint.Name}\" находящийся по адресу: \"{deliveryPoint.Location}\"\n";
+            var inlineKeyboard = KeyboardHelper.CreateConfirmChattingInlineKeyabord();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: output + "Подтвердив свой выбор вас перенаправит в чат с администратором данного пункта выдачи, как только он примет заявку",
+                text: output + "Подтвердив свой выбор вас перенаправит в чат с менеджером данного пункта выдачи, как только он примет заявку",
                 replyMarkup: inlineKeyboard,
                 cancellationToken: cancellationToken);
 

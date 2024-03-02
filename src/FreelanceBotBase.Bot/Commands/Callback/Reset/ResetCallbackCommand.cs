@@ -52,7 +52,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Reset
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
             var output = PaginationHelper.Format(paginatedRecords);
-            var inlineKeyboard = InlineKeyboardHelper.CreateDefaultInlineKeyboard();
+            var inlineKeyboard = KeyboardHelper.CreateDefaultInlineKeyboard();
 
             return await BotClient.EditMessageTextAsync(
                 chatId: chatId,

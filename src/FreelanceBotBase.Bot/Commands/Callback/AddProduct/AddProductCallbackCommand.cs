@@ -47,7 +47,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AddProduct
                     chatId: callbackQuery.Message!.Chat.Id,
                     messageId: callbackQuery.Message.MessageId,
                     text: "Маскимальное количество товаров в корзине: 10",
-                    replyMarkup: InlineKeyboardHelper.CreateResetInlineKeyboard(),
+                    replyMarkup: KeyboardHelper.CreateResetInlineKeyboard(),
                     cancellationToken: cancellationToken);
             }
 
@@ -78,7 +78,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.AddProduct
                 chatId: callbackQuery.Message.Chat.Id,
                 messageId: callbackQuery.Message.MessageId,
                 text: $"{productName} успешно добавлен в вашу корзину!",
-                replyMarkup: InlineKeyboardHelper.CreateResetInlineKeyboard(),
+                replyMarkup: KeyboardHelper.CreateResetInlineKeyboard(),
                 cancellationToken: cancellationToken);
         }
     }

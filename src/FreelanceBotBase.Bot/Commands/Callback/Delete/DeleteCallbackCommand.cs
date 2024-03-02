@@ -54,7 +54,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Delete
 
             var deleted = _cartService.Delete(message.From!.Id, userInput);
             var response = (deleted) ? $"{userInput} был успешно удалён из корзины!" : "Неправильно набрано название удаляемого объекта!";
-            var inlineKeyboard = InlineKeyboardHelper.CreateBackInlineKeyboard();
+            var inlineKeyboard = KeyboardHelper.CreateBackInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,

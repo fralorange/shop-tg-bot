@@ -31,8 +31,8 @@ namespace FreelanceBotBase.Bot.Commands.Callback.CreateDP
         {
             var text = callbackQuery.Message!.Text!;
 
-            var name = Regex.Match(text, @"(Название: )(.*)(\n)").Groups[2].ToString();
-            var location = Regex.Match(text, "(Локация: )(.*)").Groups[2].ToString();
+            var name = Regex.Match(text, @"(Название: )(.*)(\n)").Groups[2].Value;
+            var location = Regex.Match(text, "(Локация: )(.*)").Groups[2].Value;
 
             var dp = new DeliveryPoint { Name = name, Location = location };
             

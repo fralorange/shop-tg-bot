@@ -34,7 +34,7 @@ namespace FreelanceBotBase.Bot.Commands.Text.AddDeliveryPoint
             return await BotClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Название: ...\nЛокация: ...\n",
-                replyMarkup: InlineKeyboardHelper.CreateAddNewDpInlineKeyboard(),
+                replyMarkup: KeyboardHelper.CreateAddNewDpInlineKeyboard(),
                 cancellationToken: cancellationToken);
         }
     }

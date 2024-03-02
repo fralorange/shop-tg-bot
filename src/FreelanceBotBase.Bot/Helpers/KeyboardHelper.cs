@@ -5,7 +5,7 @@ namespace FreelanceBotBase.Bot.Helpers
     /// <summary>
     /// Helper for creating various keyboards.
     /// </summary>
-    public static class InlineKeyboardHelper
+    public static class KeyboardHelper
     {
         /// <summary>
         /// Creates an Inline keyboard.
@@ -125,7 +125,7 @@ namespace FreelanceBotBase.Bot.Helpers
             {
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData("Подтвердить", "chat"),
+                    InlineKeyboardButton.WithCallbackData("Подтвердить", "notification"),
                     InlineKeyboardButton.WithCallbackData("Отмена", "back")
                 }
             });
@@ -192,6 +192,36 @@ namespace FreelanceBotBase.Bot.Helpers
                 {
                     InlineKeyboardButton.WithCallbackData("Выбрать", "select_dp"),
                     InlineKeyboardButton.WithCallbackData("Очистить связь", "clear_dp"),
+                }
+            });
+        }
+
+        /// <summary>
+        /// Creates reply keyboard to end chat with manager.
+        /// </summary>
+        /// <returns></returns>
+        public static ReplyKeyboardMarkup CreateChatReplyKeyboard()
+        {
+            return new ReplyKeyboardMarkup(new[]
+            {
+                new []
+                {
+                    new KeyboardButton("Завершить сессию чата"),
+                }
+            });
+        }
+
+        /// <summary>
+        /// Creates inline keyboard so manager can accept chat with user.
+        /// </summary>
+        /// <returns></returns>
+        public static InlineKeyboardMarkup CreateNotificationInlineKeyboard()
+        {
+            return new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Принять", "chat")
                 }
             });
         }

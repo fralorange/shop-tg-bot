@@ -45,7 +45,7 @@ namespace FreelanceBotBase.Bot.Commands.Text.GetUsers
             var usersDto = _mapper.Map<List<UserDto>>(users);
 
             var output = PaginationHelper.Format(usersDto);
-            var inlineKeyboard = InlineKeyboardHelper.CreateGetUsersInlineKeyboard();
+            var inlineKeyboard = KeyboardHelper.CreateGetUsersInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,

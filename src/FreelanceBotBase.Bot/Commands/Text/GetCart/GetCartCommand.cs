@@ -34,7 +34,7 @@ namespace FreelanceBotBase.Bot.Commands.Text.GetCart
                 ? "Корзина пустая!"
                 : "Корзина:\n" + PaginationHelper.Format(cart);
 
-            var inlineKeyboard = (cart == null ) ? null : InlineKeyboardHelper.CreateCartInlineKeyboard();
+            var inlineKeyboard = (cart == null ) ? null : KeyboardHelper.CreateCartInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,

@@ -55,7 +55,7 @@ namespace FreelanceBotBase.Bot.Commands.Text.GetDeliveryPoints
             var deliveryPointsDto = _mapper.Map<List<DeliveryPointDto>>(deliveryPoints);
 
             var output = PaginationHelper.Format(deliveryPointsDto);
-            var inlineKeyboard = InlineKeyboardHelper.CreateGetDeliveryPointsInlineKeyboard();
+            var inlineKeyboard = KeyboardHelper.CreateGetDeliveryPointsInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,

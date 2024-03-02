@@ -70,7 +70,7 @@ namespace FreelanceBotBase.Bot.Commands.Callback.Search
 
             var paginatedRecords = PaginationHelper.SplitByPages(records, 10, currentPage);
             var output = PaginationHelper.Format(paginatedRecords);
-            var inlineKeyboard = InlineKeyboardHelper.CreateSearchInlineKeyboard();
+            var inlineKeyboard = KeyboardHelper.CreateSearchInlineKeyboard();
 
             return await BotClient.SendTextMessageAsync(
                 chatId: chatId,
